@@ -1,7 +1,4 @@
-- read each manifest
-  - use display name
-  - show description
-- handle copying to ~ path
+- use promises
 - check for existence of folder in project path
   - "folder exists there already. do you want to make the folder in that directory? y/n
   - y = do it

@@ -5,41 +5,47 @@ const {
   CONFIG_FILE,
 } = require("./constants");
 
-function getConfig(callback) {
-  fs.pathExists(CONFIG_FILE)
-    .then((exists) => {
-      if(exists) {
-        readConfig(callback);
-      } else {
-        createConfig(callback);
-      }
-    })
-    .catch((err) => {
-      console.log(`Unable to verify configuration file at ${CONFIG_FILE}`);
-      console.log(err);
-    });
-}
-
-function readConfig(callback) {
-    fs.readJSON(CONFIG_FILE)
-      .then((config) => {
-        callback(config);
+function getConfig() {
+  return new Promise((resolve, reject) => {
+    fs.pathExists(CONFIG_FILE)
+      .then(exists => {
+        if(exists) {
+          return readConfig();
+        } else {
+          return createConfig();
+        }
       })
-      .catch((err) => {
-        console.log(`Unable to read configuration file at ${CONFIG_FILE}`);
-        console.log(err);
+      .then(config => {
+        resolve(config);
+      })
+      .catch(err => {
+        reject(`Unable to verify configuration file at ${CONFIG_FILE}`);
       });
+  });
 }
 
-function createConfig(callback) {
+function readConfig() {
+  return new Promise((resolve, reject) => {
+    fs.readJSON(CONFIG_FILE)
+      .then(config => {
+        resolve(config);
+      })
+      .catch(err => {
+        reject(`Unable to read configuration file at ${CONFIG_FILE}`);
+      });
+  });
+}
+
+function createConfig() {
+  return new Promise((resolve, reject) => {
     fs.writeJSON(CONFIG_FILE, DEFAULT_CONFIG, { spaces: 2 })
       .then(() => {
-        callback(DEFAULT_CONFIG);
+        resolve(DEFAULT_CONFIG);
       })
-      .catch((err) => {
-        console.log(`Unable to create configuration file at ${CONFIG_FILE}`);
-        console.log(err);
+      .catch(err => {
+        reject(`Unable to create configuration file at ${CONFIG_FILE}`);
       });
+  });
 }
 
 

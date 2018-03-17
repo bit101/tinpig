@@ -1,4 +1,5 @@
 const fs = require("fs-extra");
+const path = require('path');
 const readline = require("readline");
 const { TEMPLATES_DIR } = require("./constants");
 
@@ -26,7 +27,15 @@ class ProjectMaker {
     }
   }
 
+  resolveHome(filepath) {
+    if (filepath[0] === '~') {
+      return path.join(process.env.HOME, filepath.slice(1));
+    }
+    return filepath;
+  }
+
   copyTemplate() {
+    this.projectPath = this.resolveHome(this.projectPath);
     fs.copy(this.template.path, this.projectPath)
       .then(() => {
         console.log("DONE!");

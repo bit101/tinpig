@@ -1,13 +1,17 @@
-const setup = require("./setup");
+const configure = require("./configure");
 const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
 
 class Tinpig {
   start() {
-    setup((config) => {
-      this.config = config;
-      this.getTemplate();
-    });
+    configure()
+      .then(config => {
+        this.config = config;
+        this.getTemplate();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   getTemplate() {
