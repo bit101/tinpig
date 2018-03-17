@@ -1,0 +1,11 @@
+- read each manifest
+  - use display name
+  - show description
+- handle copying to ~ path
+- check for existence of folder in project path
+  - "folder exists there already. do you want to make the folder in that directory? y/n
+  - y = do it
+  - n = quit (or reprompt for path)
+- prompt for tokens
+- token replacement in content
+- token replacement in files

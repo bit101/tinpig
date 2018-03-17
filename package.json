@@ -1,0 +1,14 @@
+{
+  "name": "tinpig",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tinpig.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^5.0.0"
+  }
+}
