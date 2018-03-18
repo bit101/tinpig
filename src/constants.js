@@ -7,7 +7,6 @@ const constants = {
   CONFIG_FILE:  TINPIG_DIR + "/config",
   TEMPLATES_DIR:  TINPIG_DIR + "/templates",
   SAMPLE_PROJECTS:  "./templates",
-  DEFAULT_CONFIG:  {option: 99},
 };
 
 module.exports = constants;

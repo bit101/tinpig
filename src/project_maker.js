@@ -5,26 +5,21 @@ const { TEMPLATES_DIR } = require("./constants");
 
 class ProjectMaker {
   makeProject(template) {
-    this.template = template;
-    this.getProjectPath();
+    return this.getProjectPath()
+      .then(projectPath => this.copyTemplate(template, projectPath));
   }
 
   getProjectPath() {
-    this.projectPath = process.argv[2];
-    if(!this.projectPath) {
+    return new Promise((resolve, reject) => {
       const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
       });
-      rl.question("Project directory: ", (answer) => {
+      rl.question("Project directory: ", (projectPath) => {
         rl.close();
-        this.projectPath = answer;
-        this.copyTemplate();
+        resolve(this.resolveHome(projectPath));
       });
-    }
-    else {
-      this.copyTemplate();
-    }
+    });
   }
 
   resolveHome(filepath) {
@@ -34,16 +29,9 @@ class ProjectMaker {
     return filepath;
   }
 
-  copyTemplate() {
-    this.projectPath = this.resolveHome(this.projectPath);
-    fs.copy(this.template.path, this.projectPath)
-      .then(() => {
-        console.log("DONE!");
-        console.log(`Project is at ${this.projectPath}`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  copyTemplate(template, projectPath) {
+    return fs.copy(template.path, projectPath)
+      .then(() => projectPath);
   }
 }
 
