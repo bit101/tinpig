@@ -16,10 +16,11 @@ class Tinpig {
 
   getTemplate() {
     const templateManager = new TemplateManager();
-    templateManager.getTemplate((template) => {
-      this.template = template;
-      this.makeProject();
-    });
+    templateManager.getTemplate()
+      .then(template => {
+        this.template = template;
+        this.makeProject();
+      });
   }
 
   makeProject() {
