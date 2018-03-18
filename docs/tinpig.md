@@ -32,10 +32,10 @@
       - post-template action
 - command line
   - `tinpig` - fully interactive
-  - `tinpig --out=project_dir_name` - specify project dir
-  - `tinpig --out=path/to/project_dir_name` - project with full path
+  - `tinpig --path=project_dir_name` - specify project dir
+  - `tinpig --path=path/to/project_dir_name` - project with full path
   - `tinpig --template=template` - specify template
-  - `tinpig --out=project_dir_name --template template` - specify project dir and template
+  - `tinpig --path=project_dir_name --template template` - specify project dir and template
   - `tinpig --list` - list templates
   - defaults to current dir
   - template is template name from manifest
@@ -52,7 +52,7 @@
   - if template specified with `--template` arg
     - look for that template name and use it.
     - fail if it doesn't exist
-  - if no project dir specified with `--out`, prompt for project dir
+  - if no project dir specified with `--path`, prompt for project dir
   - execute pre-template action if any
   - prompts for each token found in manifest list (defaults if any in parens)
   - gets user input for each token, saves

@@ -7,14 +7,33 @@ const {
 } = require("./constants");
 
 class TemplateManager  {
-  getTemplate() {
+  getTemplate(templateName) {
     return fs.readdir(TEMPLATES_DIR)                              // are there any templates?
       .then(templateNames => this.createTemplates(templateNames)) // if not, create sample ones
-      .then(() => this.readTemplates())                           // read tht template list
+      .then(() => this.readTemplates())                           // read the template list
       .then(templates => this.loadTemplates(templates))           // load each template
-      .then(() => this.listTemplates())                           // display the list
-      .then(() => this.getChoice())                               // get user's choice
-      .then(choice => this.templates[choice]);                    // return template
+      .then(() => {
+        if(templateName) {
+          return this.getTemplateFromArgs(templateName);
+        }
+        else {
+          return this.getTemplateChoice();
+        }
+      });
+  }
+
+  getTemplateFromArgs(templateName) {
+    for(var i = 0; i < this.templates.length; i++) {
+      if(templateName === this.templates[i].name) {
+        return this.templates[i];
+      }
+    }
+  }
+
+  getTemplateChoice() {
+    this.listTemplates();                           // display the list
+    return this.getChoice()                         // get user's choice
+      .then(choice => this.templates[choice]);      // return template
   }
 
   displayAvailableTemplates() {

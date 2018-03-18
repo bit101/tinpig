@@ -1,88 +1,53 @@
 const Configurator = require("./configurator");
 const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
+const { printBanner, displayHelp } = require("./display_util");
 
 class Tinpig {
   start() {
     const configurator = new Configurator();
     configurator.configure()
       .then(config => this.config = config)
-      .then(() => this.printBanner())
+      .then(() => printBanner(this.config.banner))
       .then(() => this.getArgs())
-      .then(args => {
-        if(args.wantsHelp) {
-          return this.displayHelp();
+      .then(() => {
+        if(this.args.wantsHelp) {
+          return displayHelp();
         }
-        else if(args.wantsList) {
+        else if(this.args.wantsList) {
           return this.displayList();
         } else {
-          return this.getTemplate(args.path, args.template);
+          return this.getTemplate(this.args.template);
         }
       })
       .catch(err => console.log(err));
   }
 
   getArgs() {
-    const args = {};
+    this.args = {};
     for(let i = 0; i < process.argv.length; i++) {
       const arg = process.argv[i];
       if(arg === "--list") {
-        args.wantsList = true;
+        this.args.wantsList = true;
       }
       if(arg === "--help") {
-        args.wantsHelp = true;
+        this.args.wantsHelp = true;
       }
       if(arg.match(/^--path=/)) {
-        args.path = arg.split("=")[1];
+        this.args.path = arg.split("=")[1];
       }
       if(arg.match(/^--template=/)) {
-        args.template = arg.split("=")[1];
+        this.args.template = arg.split("=")[1];
       }
     }
-    return args;
   }
 
-  printBanner() {
-    if(this.config.banner) {
-      console.log("  _   _             _       ");
-      console.log(" | | (_)           (_)      ");
-      console.log(" | |_ _ _ __  _ __  _  __ _ ");
-      console.log(" | __| | '_ \\| '_ \\| |/ _` |");
-      console.log(" | |_| | | | | |_) | | (_| |");
-      console.log("  \\__|_|_| |_| .__/|_|\\__, |");
-      console.log("             | |       __/ |");
-      console.log("             |_|      |___/ ");
-    }
-  }
 
   displayList() {
     const templateManager = new TemplateManager();
     templateManager.displayAvailableTemplates();
   }
 
-  displayHelp() {
-    console.log("Usage:");
-    console.log("  tinpig [options]");
-    console.log("\nOptions:");
-    console.log("  --help - Display this help.");
-    console.log("  --list - List all available templates.");
-    console.log("  --path - Relative or absolute path to create new project");
-    console.log("  --template - Template name to use. Get name from --list.");
-    console.log("\nExamples:");
-    console.log("\nFully Interactive:");
-    console.log("  tinpig");
-    console.log("\nWith path. Will be prompted for template:");
-    console.log("  tinpig --path=MyProject");
-    console.log("  tinpig --path=\"My Poorly Named Project With Spaces\"");
-    console.log("  tinpig --path=My\\ Poorly\\ Named\\ Project\\ With\\ Spaces");
-    console.log("  tinpig --path=/home/keith/projects/MyProject");
-    console.log("  tinpig --path=~/projects/MyProject");
-    console.log("\nWith template. Will be prompted for path:");
-    console.log("  tinpig --template=\"HTML Project\"");
-    console.log("  tinpig --template=HTML\\ Project");
-    console.log("\nWith path and template:");
-    console.log("  tinpig --path=MyProject --template=HTML\\ Project");
-  }
 
 
 
@@ -94,7 +59,7 @@ class Tinpig {
 
   makeProject(template) {
     const projectMaker = new ProjectMaker();
-    projectMaker.makeProject(template)
+    projectMaker.makeProject(this.args.path, template)
       .then(projectPath => {
         console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`);
       })

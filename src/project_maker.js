@@ -4,22 +4,25 @@ const readline = require("readline");
 const { TEMPLATES_DIR } = require("./constants");
 
 class ProjectMaker {
-  makeProject(template, config) {
-    this.config = config;
-    return this.getProjectPath()
+  makeProject(path, template) {
+    return this.getProjectPath(path)
       .then(projectPath => this.copyTemplate(template, projectPath));
   }
 
-  getProjectPath() {
+  getProjectPath(path) {
     return new Promise((resolve, reject) => {
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      });
-      rl.question("Project directory: ", (projectPath) => {
-        rl.close();
-        resolve(this.resolveHome(projectPath));
-      });
+      if(path) {
+        resolve(path);
+      } else {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        });
+        rl.question("Project directory: ", (projectPath) => {
+          rl.close();
+          resolve(this.resolveHome(projectPath));
+        });
+      }
     });
   }
 
