@@ -4,7 +4,8 @@ const readline = require("readline");
 const { TEMPLATES_DIR } = require("./constants");
 
 class ProjectMaker {
-  makeProject(template) {
+  makeProject(template, config) {
+    this.config = config;
     return this.getProjectPath()
       .then(projectPath => this.copyTemplate(template, projectPath));
   }
@@ -30,7 +31,22 @@ class ProjectMaker {
   }
 
   copyTemplate(template, projectPath) {
-    return fs.copy(template.path, projectPath)
+    const filter = (file) => {
+      if(template.ignore) {
+        for(var i = 0; i < template.ignore.length; i++) {
+          if(file.match(new RegExp(template.ignore[i]))) {
+            return false;
+          }
+        }
+      }
+      return !file.match(/tinpig\.json$/);
+    };
+    const options = {
+      overwrite: false,
+      errorOnExist: true,
+      filter: filter,
+    };
+    return fs.copy(template.path, projectPath, options)
       .then(() => projectPath);
   }
 }

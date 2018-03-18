@@ -17,6 +17,32 @@ class TemplateManager  {
       .then(choice => this.templates[choice]);                    // return template
   }
 
+  displayAvailableTemplates() {
+    return this.readTemplates()
+      .then(templateNames => this.createTemplates(templateNames))
+      .then(() => this.readTemplates())
+      .then(templates => this.loadTemplates(templates))
+      .then(() => this.printTemplateList())
+      .catch(err => console.log("Unable to read templates."));
+  }
+
+  printTemplateList() {
+    console.log("\nAvailable templates:\n");
+    for(let i = 0; i < this.templates.length; i++) {
+      const name = this.templates[i].name;
+      let underscore = "";
+      for(let i = 0; i < name.length; i++) {
+        underscore += "=";
+      }
+      const desc = this.templates[i].description;
+      console.log(name);
+      console.log(underscore);
+      console.log(desc);
+      console.log("");
+    }
+  }
+
+
   readTemplates() {
     return fs.readdir(TEMPLATES_DIR);
   }
