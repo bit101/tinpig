@@ -42,14 +42,10 @@ class Tinpig {
     }
   }
 
-
   displayList() {
     const templateManager = new TemplateManager();
     templateManager.displayAvailableTemplates();
   }
-
-
-
 
   getTemplate(path, templateName) {
     const templateManager = new TemplateManager();

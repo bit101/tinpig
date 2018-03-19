@@ -25,11 +25,8 @@
       - name of project
       - project description
       - ignore list - files that won't be copied
-      - ignoreContentToken list - files that won't have tokens replaced in conent
       - lists names of all tokens in order they will be asked for
         - token, defaultValue
-      - pre-template action
-      - post-template action
 - command line
   - `tinpig` - fully interactive
   - `tinpig --path=project_dir_name` - specify project dir
@@ -37,6 +34,7 @@
   - `tinpig --template=template` - specify template
   - `tinpig --path=project_dir_name --template template` - specify project dir and template
   - `tinpig --list` - list templates
+  - `tinpig --help` - display help
   - defaults to current dir
   - template is template name from manifest
 - functionality
@@ -53,13 +51,11 @@
     - look for that template name and use it.
     - fail if it doesn't exist
   - if no project dir specified with `--path`, prompt for project dir
-  - execute pre-template action if any
   - prompts for each token found in manifest list (defaults if any in parens)
   - gets user input for each token, saves
   - copies each folder and file from template to new project dir
   - changes any file/dir names based on tokens
   - replaces any tokens within text based files
-  - execute post-template action if any
 
 
 Sample structure:

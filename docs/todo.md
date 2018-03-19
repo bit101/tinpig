@@ -1,3 +1,6 @@
-- prompt for tokens
-- token replacement in content
-- token replacement in files
+more cleanup
+a few quality templates
+  basic html
+  npm html
+  python?
+  crazy demo

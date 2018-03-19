@@ -1,4 +1,9 @@
 {
   "name": "HTML",
-  "description": "Basic HTML Project"
+  "description": "Basic HTML Project",
+  "tokens": [
+    "title",
+    "project_name",
+    "name"
+  ]
 }
