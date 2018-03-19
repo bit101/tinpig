@@ -6,41 +6,41 @@ const { TEMPLATES_DIR } = require("./constants");
 
 class ProjectMaker {
   makeProject(path, template) {
+    this.template = template;
     return this.getProjectPath(path)
-      .then(projectPath => {
-        this.projectPath = projectPath;
-        return this.getTokens(template);
-      })
-      .then(() => this.copyTemplate(template, this.projectPath))
-      .then(() => this.replaceTokensInFiles(path))
-      .then(() => this.renameFilesWithTokens(path))
-      .then(() => path);
+      .then(() => this.getTokens())
+      .then(() => this.copyTemplate())
+      .then(() => this.replaceTokensInFiles())
+      .then(() => this.renameFilesWithTokens(this.projectPath))
+      .then(() => this.projectPath);
   }
 
   getProjectPath(path) {
     return new Promise((resolve, reject) => {
       if(path) {
-        resolve(path);
+        // if we have a path, use it
+        this.projectPath = this.resolveHome(path);
+        resolve();
       } else {
+        // no path, so ask for it and use it
         const rl = readline.createInterface({
           input: process.stdin,
           output: process.stdout
         });
         rl.question("Project directory: ", (projectPath) => {
           rl.close();
-          resolve(this.resolveHome(projectPath));
+          this.projectPath = this.resolveHome(projectPath);
+          resolve();
         });
       }
     });
   }
 
-  getTokens(template) {
+  getTokens() {
     this.tokens = {};
-    return template.tokens.reduce((promise, token) => {
+    return this.template.tokens.reduce((promise, token) => {
       return promise
-        .then(() => {
-          return this.getTokenValueFor(token);
-        })
+        .then(() => this.getTokenValueFor(token));
     }, Promise.resolve());
   }
 
@@ -50,6 +50,7 @@ class ProjectMaker {
         input: process.stdin,
         output: process.stdout
       });
+      console.log("\nEnter values for each token in this template:");
       rl.question(`Value for {${token}}: `, (value) => {
         rl.close();
         this.tokens[token] = value;
@@ -58,12 +59,12 @@ class ProjectMaker {
     });
   }
 
-  replaceTokensInFiles(path) {
+  replaceTokensInFiles() {
     for(let token in this.tokens) {
       replace({
         regex: "\\${" + token + "}",
         replacement: this.tokens[token],
-        paths: [path],
+        paths: [this.projectPath],
         recursive: true,
         silent: true,
       });
@@ -98,11 +99,11 @@ class ProjectMaker {
     return filepath;
   }
 
-  copyTemplate(template, projectPath) {
+  copyTemplate() {
     const filter = (file) => {
-      if(template.ignore) {
-        for(var i = 0; i < template.ignore.length; i++) {
-          if(file.match(new RegExp(template.ignore[i]))) {
+      if(this.template.ignore) {
+        for(var i = 0; i < this.template.ignore.length; i++) {
+          if(file.match(new RegExp(this.template.ignore[i]))) {
             return false;
           }
         }
@@ -114,8 +115,8 @@ class ProjectMaker {
       errorOnExist: true,
       filter: filter,
     };
-    return fs.copy(template.path, projectPath, options)
-      .then(() => projectPath);
+    return fs.copy(this.template.path, this.projectPath, options)
+      .then(() => this.projectPath);
   }
 }
 

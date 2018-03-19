@@ -13,14 +13,13 @@ class Tinpig {
       .then(() => {
         if(this.args.wantsHelp) {
           return displayHelp();
-        }
-        else if(this.args.wantsList) {
+        } else if(this.args.wantsList) {
           return this.displayList();
         } else {
           return this.getTemplate(this.args.template);
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log("\nTinpig encountered and error. Make sure the template is valid and the path you specified is available."));
   }
 
   getArgs() {
@@ -58,8 +57,7 @@ class Tinpig {
     projectMaker.makeProject(this.args.path, template)
       .then(projectPath => {
         console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`);
-      })
-      .catch(err => console.log("\nUnable to create project. Make sure the template is valid and the path you specified is available."));
+      });
   }
 }
 

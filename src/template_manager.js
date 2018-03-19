@@ -1,10 +1,7 @@
 const fs = require("fs-extra");
 const readline = require("readline");
 
-const {
-  TEMPLATES_DIR,
-  SAMPLE_PROJECTS,
-} = require("./constants");
+const { TEMPLATES_DIR, SAMPLE_PROJECTS } = require("./constants");
 
 class TemplateManager  {
   getTemplate(templateName) {
@@ -13,11 +10,11 @@ class TemplateManager  {
       .then(() => this.readTemplates())                           // read the template list
       .then(templates => this.loadTemplates(templates))           // load each template
       .then(() => {
-        if(templateName) {
-          return this.getTemplateFromArgs(templateName);
+        if(templateName) {                                        // did user specify a template?
+          return this.getTemplateFromArgs(templateName);          // get that template 
         }
         else {
-          return this.getTemplateChoice();
+          return this.getTemplateChoice();                        // no. ask for the template
         }
       });
   }
@@ -31,7 +28,6 @@ class TemplateManager  {
   }
 
   getTemplateChoice() {
-    this.listTemplates();                           // display the list
     return this.getChoice()                         // get user's choice
       .then(choice => this.templates[choice]);      // return template
   }
@@ -41,26 +37,27 @@ class TemplateManager  {
       .then(templateNames => this.createTemplates(templateNames))
       .then(() => this.readTemplates())
       .then(templates => this.loadTemplates(templates))
-      .then(() => this.printTemplateList())
-      .catch(err => console.log("Unable to read templates."));
+      .then(() => this.printTemplateList());
   }
 
   printTemplateList() {
     console.log("\nAvailable templates:\n");
     for(let i = 0; i < this.templates.length; i++) {
-      const name = this.templates[i].name;
-      let underscore = "";
-      for(let i = 0; i < name.length; i++) {
-        underscore += "=";
-      }
-      const desc = this.templates[i].description;
-      console.log(name);
-      console.log(underscore);
-      console.log(desc);
+      const template = this.templates[i];
+      console.log(template.name);
+      console.log(this.getUnderscore(template.name.length));
+      console.log(template.description);
       console.log("");
     }
   }
 
+  getUnderscore(length) {
+    let underscore = "";
+    for(let i = 0; i < length; i++) {
+      underscore += "=";
+    }
+    return underscore;
+  }
 
   readTemplates() {
     return fs.readdir(TEMPLATES_DIR);
@@ -89,15 +86,13 @@ class TemplateManager  {
       });
   }
 
-  listTemplates() {
-    console.log("\nAvailable templates:\n");
-    for(let i = 0; i < this.templates.length; i++) {
-      console.log(`${i + 1}. ${this.templates[i].name}`);
-    }
-  }
-
   getChoice() {
     return new Promise((resolve, reject) => {
+      console.log("\nAvailable templates:\n");
+      for(let i = 0; i < this.templates.length; i++) {
+        console.log(`${i + 1}. ${this.templates[i].name}`);
+      }
+
       const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout

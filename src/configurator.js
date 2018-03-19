@@ -1,11 +1,6 @@
 const fs = require("fs-extra");
 
-const {
-  TINPIG_DIR,
-  CONFIG_FILE,
-  TEMPLATES_DIR,
-  SAMPLE_PROJECTS,
-} = require("./constants");
+const { CONFIG_FILE, TEMPLATES_DIR } = require("./constants");
 
 const DEFAULT_CONFIG = {
   banner: true,
