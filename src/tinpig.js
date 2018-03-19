@@ -19,7 +19,7 @@ class Tinpig {
           return this.getTemplate(this.args.template);
         }
       })
-      .catch(err => console.log("\nTinpig encountered and error. Make sure the template is valid and the path you specified is available."));
+      .catch(err => console.log("\nTinpig encountered an error. Make sure the template is valid and the path you specified is available."));
   }
 
   getArgs() {

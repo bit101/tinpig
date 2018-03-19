@@ -1,0 +1,7 @@
+{
+  "name": "Canvas",
+  "description": "HTML5 Canvas application with vanilla JavaScript.",
+  "tokens": [
+    "title"
+  ]
+}

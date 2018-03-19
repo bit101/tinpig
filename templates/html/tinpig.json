@@ -1,9 +1,7 @@
 {
   "name": "HTML",
-  "description": "Basic HTML Project",
+  "description": "Barebones HTML Project with JavaScript and CSS",
   "tokens": [
-    "title",
-    "project_name",
-    "name"
+    "title"
   ]
 }
