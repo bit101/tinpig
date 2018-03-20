@@ -2,6 +2,9 @@
   "name": "HTML",
   "description": "Barebones HTML Project with JavaScript and CSS",
   "tokens": [
-    "title"
+    {
+      "name": "TITLE",
+      "default": "Hello world"
+    }
   ]
 }
