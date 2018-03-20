@@ -18,11 +18,9 @@ class ProjectMaker {
   getProjectPath(path) {
     return new Promise((resolve, reject) => {
       if(path) {
-        // if we have a path, use it
         this.projectPath = this.resolveHome(path);
         resolve();
       } else {
-        // no path, so ask for it and use it
         const rl = readline.createInterface({
           input: process.stdin,
           output: process.stdout
