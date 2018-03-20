@@ -1,14 +1,13 @@
 {
   "name": "tinpig",
   "version": "1.0.0",
-  "description": "",
+  "description": "Create projects based on your own custom templates. Supports token replacement of content and file names at project creation time.",
   "preferGlobal": true,
   "bin": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Keith Peters",
+  "license": "MIT",
   "dependencies": {
     "commander": "^2.15.0",
     "fs-extra": "^5.0.0",

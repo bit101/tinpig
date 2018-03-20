@@ -9,7 +9,7 @@ commander.on("--help", () => {
 });
 
 commander
-  .version("0.0.1", "-v, --version")
+  .version(require('./package.json').version, "-v, --version")
   .option("-l, --list", "list all available templates")
   .option("-t, --template [template]", "specify which template to use")
   .option("-p, --path [path]", "specify path for project")
