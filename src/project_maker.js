@@ -48,10 +48,11 @@ class ProjectMaker {
         input: process.stdin,
         output: process.stdout
       });
-      console.log("\nEnter values for each token in this template:");
-      rl.question(`Value for {${token}}: `, (value) => {
+      console.log("\nSupply values for each token in this template. Default values (if any) will be in parentheses. Press enter to accept default.\n");
+      const defaultValue = token.default ? ` (${token.default})` : "";
+      rl.question(`- ${token.name}${defaultValue}: `, (value) => {
         rl.close();
-        this.tokens[token] = value;
+        this.tokens[token.name] = value || token.default;
         resolve();
       });
     });
