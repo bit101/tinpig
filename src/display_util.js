@@ -15,10 +15,10 @@ function displayHelp() {
   console.log("Usage:");
   console.log("  tinpig [options]");
   console.log("\nOptions:");
-  console.log("  --help                  - Display this help.");
-  console.log("  --list                  - List all available templates.");
-  console.log("  --path=<path>           - Relative or absolute path to create new project");
-  console.log("  --template=<template>   - Template name to use. Get name from --list.");
+  console.log("  --help                  Display this help.");
+  console.log("  --list                  List all available templates.");
+  console.log("  --path=<path>           Relative or absolute path to create new project");
+  console.log("  --template=<template>   Template name to use. Get name from --list.");
   console.log("\nExamples:");
   console.log("\nFully interactive:");
   console.log("  tinpig");
@@ -35,7 +35,7 @@ function displayHelp() {
   console.log("  tinpig --template=Custom\\ Template");
   console.log("\nWith path and template:");
   console.log("  tinpig --path=my_project --template=HTML");
-  console.log("\nProject home: https://github.com/bit101/tinpig");
+  console.log("\nProject home: https://github.com/bit101/tinpig\n");
 }
 
 module.exports = { printBanner, displayHelp };

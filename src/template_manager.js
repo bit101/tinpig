@@ -44,9 +44,11 @@ class TemplateManager  {
     console.log("\nAvailable templates:\n");
     for(let i = 0; i < this.templates.length; i++) {
       const template = this.templates[i];
+      const command = template.name.indexOf(" ") === -1 ? template.name : `"${template.name}"`;
       console.log(template.name);
       console.log(this.getUnderscore(template.name.length));
-      console.log(template.description);
+      console.log("  " + template.description);
+      console.log(`  > tinpig --template=${command} --path=my_project`);
       console.log("");
     }
   }
@@ -54,7 +56,7 @@ class TemplateManager  {
   getUnderscore(length) {
     let underscore = "";
     for(let i = 0; i < length; i++) {
-      underscore += "=";
+      underscore += "-";
     }
     return underscore;
   }
