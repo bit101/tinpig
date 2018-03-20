@@ -1,63 +1,36 @@
 const Configurator = require("./configurator");
 const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
-const { printBanner, displayHelp } = require("./display_util");
+const printBanner = require("./print_banner");
 
 class Tinpig {
-  start() {
+  start(templateName, path) {
     const configurator = new Configurator();
+    const templateManager = new TemplateManager();
+    const projectMaker = new ProjectMaker();
+
     configurator.configure()
       .then(config => this.config = config)
       .then(() => printBanner(this.config.banner))
-      .then(() => this.getArgs())
-      .then(() => {
-        if(this.args.wantsHelp) {
-          return displayHelp();
-        } else if(this.args.wantsList) {
-          return this.displayList();
-        } else {
-          return this.getTemplate(this.args.template);
-        }
-      })
-      .catch(err => console.log("\nTinpig encountered an error. Make sure the template is valid and the path you specified is available."));
-  }
-
-  getArgs() {
-    this.args = {};
-    for(let i = 0; i < process.argv.length; i++) {
-      const arg = process.argv[i];
-      if(arg === "--list") {
-        this.args.wantsList = true;
-      }
-      if(arg === "--help") {
-        this.args.wantsHelp = true;
-      }
-      if(arg.match(/^--path=/)) {
-        this.args.path = arg.split("=")[1];
-      }
-      if(arg.match(/^--template=/)) {
-        this.args.template = arg.split("=")[1];
-      }
-    }
+      .then(() => templateManager.getTemplate(templateName))
+      .then(template => projectMaker.makeProject(path, template))
+      .then(projectPath => console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`))
+      .catch(err => {
+        console.log("\nTinpig encountered an error.");
+        console.log("Make sure the template is valid.");
+        console.log("Ensure the path you specified is valid and accesible.");
+      });
   }
 
   displayList() {
+    const configurator = new Configurator();
     const templateManager = new TemplateManager();
-    templateManager.displayAvailableTemplates();
-  }
 
-  getTemplate(path, templateName) {
-    const templateManager = new TemplateManager();
-    templateManager.getTemplate(path, templateName)
-      .then(template => this.makeProject(template));
-  }
-
-  makeProject(template) {
-    const projectMaker = new ProjectMaker();
-    projectMaker.makeProject(this.args.path, template)
-      .then(projectPath => {
-        console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`);
-      });
+    configurator.configure()
+      .then(config => this.config = config)
+      .then(() => printBanner(this.config.banner))
+      .then(() => templateManager.displayAvailableTemplates())
+      .catch(err => console.log("\nTinpig encountered an error and is unable to display templates."));
   }
 }
 
