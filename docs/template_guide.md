@@ -101,7 +101,7 @@ For this reason, it's best if you avoid using spaces in your template names. Spa
 
 3. Author and contact info. Nothing is done with this, but it's good to include.
 
-4. The token list. An array of objects. Each object has a `name` property which is the name of the token, without the brackets or percent signs. The token object can also include a `default` property. This will be displayed in parentheses after the token name when you are entering token replacement values. You can just hit enter to accept the default, or type your own value.
+4. The token list. An array of objects. Each object has a `name` property which is the name of the token, without the brackets or percent signs. The token object can also include a `default` property. This will be displayed in parentheses after the token name when you are entering token replacement values. This template has a `LICENSE` token with a default of `ISC`. You can just hit enter to accept the default, or type your own value.
 
 5. A list of ignored files or folders. This template includes a `template_readme.md` file that contains useful information about the template, but is not needed in the final project. Any files listed here will not be copied into the project - and of course, will not be processed for tokens. Note that the `tinpig.json` manifest file itself is automatically ignored and will not be copied into the project. You don't need to explicitly ignore it.
 
