@@ -12,7 +12,8 @@ class ProjectMaker {
       .then(() => this.copyTemplate())
       .then(() => this.replaceTokensInFiles())
       .then(() => this.renameFilesWithTokens(this.projectPath))
-      .then(() => this.projectPath);
+      .then(() => this.projectPath)
+      .catch(err => console.log(`\nUnable to create project at '${this.projectPath}'`));
   }
 
   getProjectPath(path) {
@@ -48,7 +49,7 @@ class ProjectMaker {
         input: process.stdin,
         output: process.stdout
       });
-      console.log("\nSupply values for each token in this template. Default values (if any) will be in parentheses. Press enter to accept default.\n");
+      console.log("\nSupply values for each token in this template. Press enter to accept default values (in parentheses).\n");
       const defaultValue = token.default ? ` (${token.default})` : "";
       rl.question(`- ${token.name}${defaultValue}: `, (value) => {
         rl.close();

@@ -10,17 +10,20 @@ class Tinpig {
     const projectMaker = new ProjectMaker();
 
     configurator.configure()
-      .then(config => this.config = config)
-      .then(() => printBanner(this.config.banner))
-      .then(() => templateManager.getTemplate(templateName))
-      .then(template => projectMaker.makeProject(path, template))
-      .then(projectPath => console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`))
-      .catch(err => {
-        console.log("\nTinpig encountered an error.");
-        console.log("Make sure the template is valid.");
-        console.log("Ensure the path you specified is valid and accesible.");
-      });
+      .then(config      => this.config = config)
+      .then(()          => printBanner(this.config.banner))
+      .then(()          => templateManager.getTemplate(templateName))
+      .then(template    => projectMaker.makeProject(path, template))
+      .then(projectPath => this.displaySuccess(projectPath))
+      .catch(err        => console.log(err));
   }
+
+  displaySuccess(projectPath) {
+    if(projectPath) {
+      console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`);
+    }
+  }
+
 
   displayList() {
     const configurator = new Configurator();

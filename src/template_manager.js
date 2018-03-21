@@ -56,6 +56,7 @@ class TemplateManager  {
         return this.templates[i];
       }
     }
+    throw `\n'${templateName}' is not a valid template.`;
   }
 
 
