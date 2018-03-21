@@ -23,15 +23,15 @@ The first time you run tinpig it will create a folder at `~/.congig/tinpig`. Thi
 
 To create a new project-based template, simply type `tinpig`. This will display a list of available templates for you to choose.
 
---- image ---
+![screenshot 1](images/tinpig_01.png)
 
 When you choose a template, tinpig will ask you for a path for your new project. Enter a directory name to create a project with that name in the current directory, or an absolute or relative path to some other location.
 
---- image ---
+![screenshot 2](images/tinpig_02.png)
 
 If the template includes any replaceable tokens, you will be prompted to provide values for each token. Some tokens may have default values that will be displayed in parentheses after the name of the token. Press enter to accept the default value, or type an alternate value.
 
---- image ---
+![screenshot 3](images/tinpig_03.png)
 
 tinpig will then create the project at the specified location, performing all of the token replacment. And you are done, ready to use your new project.
 
