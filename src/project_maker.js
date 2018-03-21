@@ -36,11 +36,25 @@ class ProjectMaker {
   }
 
   getTokens() {
+    console.log("\nSupply values for each token in this template.");
+    if(this.hasDefaults()) {
+      console.log("Default values are in parentheses. Press enter to accept default.");
+    }
+    console.log("");
     this.tokens = {};
     return this.template.tokens.reduce((promise, token) => {
       return promise
         .then(() => this.getTokenValueFor(token));
     }, Promise.resolve());
+  }
+
+  hasDefaults() {
+    for(let i = 0; i < this.template.tokens.length; i++) {
+      if(this.template.tokens[i].default) {
+        return true;
+      }
+    }
+    return false;
   }
 
   getTokenValueFor(token) {
@@ -49,7 +63,7 @@ class ProjectMaker {
         input: process.stdin,
         output: process.stdout
       });
-      console.log("\nSupply values for each token in this template. Press enter to accept default values (in parentheses).\n");
+
       const defaultValue = token.default ? ` (${token.default})` : "";
       rl.question(`- ${token.name}${defaultValue}: `, (value) => {
         rl.close();
