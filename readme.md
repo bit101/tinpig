@@ -1,12 +1,3 @@
-  _   _             _ 
- | | (_)           (_)
- | |_ _ _ __  _ __  _  __ _ 
- | __| | '_ \| '_ \| |/ _` |
- | |_| | | | | |_) | | (_| |
-  \__|_|_| |_| .__/|_|\__, |
-             | |       __/ |
-             |_|      |___/ 
-
 # tinpig Project Creator
 
 tinpig is a simple tool for quickly creating projects of any kind. Projects are created from templates which are simply collections of folders and files. The folders and files can contain special tokens that can be replaced with other values when the project is created. You can use a premade temple, modify a template, or create your own from scratch.
