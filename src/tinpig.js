@@ -14,16 +14,8 @@ class Tinpig {
       .then(()          => printBanner(this.config.banner))
       .then(()          => templateManager.getTemplate(templateName))
       .then(template    => projectMaker.makeProject(path, template))
-      .then(projectPath => this.displaySuccess(projectPath))
       .catch(err        => console.log(err));
   }
-
-  displaySuccess(projectPath) {
-    if(projectPath) {
-      console.log(`\nComplete!. Project has been created in \`${projectPath}\`.\n`);
-    }
-  }
-
 
   displayList() {
     const configurator = new Configurator();
