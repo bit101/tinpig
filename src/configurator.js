@@ -9,17 +9,16 @@ const DEFAULT_CONFIG = {
 class Configurator {
   configure() {
     return fs.ensureDir(TEMPLATES_DIR)
-      .then(() => this.getConfig())
+      .then(() => this.getConfig());
   }
 
   getConfig() {
     return fs.pathExists(CONFIG_FILE)
-      .then(exists => {
-        if(exists) {
+      .then((exists) => {
+        if (exists) {
           return this.readConfig();
-        } else {
-          return this.createConfig();
         }
+        return this.createConfig();
       });
   }
 

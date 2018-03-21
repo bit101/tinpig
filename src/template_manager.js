@@ -4,9 +4,9 @@ const getTemplateChoice = require("./get_template_choice");
 const { TEMPLATES_DIR, SAMPLE_PROJECTS } = require("./constants");
 
 class TemplateManager  {
-  ////////////////////////////////////////
+  //--------------------------------------
   // Get template by arg or ui choice
-  ////////////////////////////////////////
+  //--------------------------------------
   getTemplate(templateName) {
     return fs.readdir(TEMPLATES_DIR)
       .then(templateNames => this.createTemplates(templateNames))
@@ -16,7 +16,7 @@ class TemplateManager  {
   }
 
   createTemplates(templates) {
-    if(templates.length === 0) {
+    if (templates.length === 0) {
       return fs.copy(SAMPLE_PROJECTS, TEMPLATES_DIR);
     }
     return null;
@@ -28,42 +28,38 @@ class TemplateManager  {
 
   loadTemplates(templateNames) {
     this.templates = [];
-    return Promise.all(templateNames.map((templateName, index) => {
-      return this.loadTemplate(templateName, index);
-    }));
+    return Promise.all(templateNames.map((templateName, index) =>
+      this.loadTemplate(templateName, index)));
   }
 
   loadTemplate(templateName, index) {
     const path = `${TEMPLATES_DIR}/${templateName}`;
     return fs.readJSON(`${path}/tinpig.json`)
-      .then(template => {
+      .then((template) => {
         template.path = path;
         this.templates[index] = template;
       });
   }
 
   getTemplateFromArgsOrChoice(templateName) {
-    if(templateName) {
+    if (templateName) {
       return this.getTemplateFromArgs(templateName);
-    } else {
-      return getTemplateChoice(this.templates);
     }
+    return getTemplateChoice(this.templates);
   }
 
   getTemplateFromArgs(templateName) {
-    for(var i = 0; i < this.templates.length; i++) {
-      if(templateName === this.templates[i].name) {
+    for (let i = 0; i < this.templates.length; i++) {
+      if (templateName === this.templates[i].name) {
         return this.templates[i];
       }
     }
-    throw `\n'${templateName}' is not a valid template.`;
+    throw new Error(`\n'${templateName}' is not a valid template.`);
   }
 
-
-
-  ////////////////////////////////////////
+  //--------------------------------------
   // List templates only (tinpig --list)
-  ////////////////////////////////////////
+  //--------------------------------------
   displayAvailableTemplates() {
     return this.readTemplates()
       .then(templateNames => this.createTemplates(templateNames))
@@ -74,13 +70,13 @@ class TemplateManager  {
 
   printTemplateList() {
     console.log("\nAvailable templates:\n");
-    for(let i = 0; i < this.templates.length; i++) {
+    for (let i = 0; i < this.templates.length; i++) {
       const template = this.templates[i];
       console.log(`${i + 1}. ${template.name}: ${template.description}`);
     }
     console.log("");
   }
-};
+}
 
 module.exports = TemplateManager;
 

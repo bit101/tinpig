@@ -10,11 +10,15 @@ class Tinpig {
     const projectMaker = new ProjectMaker();
 
     configurator.configure()
-      .then(config      => this.config = config)
+      .then(config      => this.setConfig(config))
       .then(()          => printBanner(this.config.banner))
       .then(()          => templateManager.getTemplate(templateName))
       .then(template    => projectMaker.makeProject(path, template))
       .catch(err        => console.log(err));
+  }
+
+  setConfig(config) {
+    this.config = config;
   }
 
   displayList() {
@@ -22,10 +26,10 @@ class Tinpig {
     const templateManager = new TemplateManager();
 
     configurator.configure()
-      .then(config => this.config = config)
+      .then(config => this.setConfig(config))
       .then(() => printBanner(this.config.banner))
       .then(() => templateManager.displayAvailableTemplates())
-      .catch(err => console.log("\nTinpig encountered an error and is unable to display templates."));
+      .catch(() => console.log("\nTinpig encountered an error and is unable to display templates."));
   }
 }
 
