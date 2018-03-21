@@ -1,0 +1,20 @@
+{
+  "name": "Webpack/React",
+  "description": "Full blown Webpack 4 project with React, Babel, ESLint, etc.",
+  "author": "Keith Peters",
+  "contact": "https://github.com/bit101",
+  "tokens": [
+    {
+      "name": "PROJECT_NAME"
+    },
+    {
+      "name": "AUTHOR"
+    },
+    {
+      "name": "LICENSE",
+      "default": "ISC"
+    }
+  ],
+  "ignore": [ "template_readme.md" ],
+  "postMessage": "From inside the project folder, type `npm install` to install dependencies. Then `npm start` to start Webpack Dev Server. Open `localhost:8080` to view the site."
+}

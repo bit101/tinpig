@@ -12,7 +12,7 @@ class ProjectMaker {
       .then(() => this.copyTemplate())
       .then(() => this.replaceTokensInFiles())
       .then(() => this.renameFilesWithTokens(this.projectPath))
-      .then(() => this.projectPath)
+      .then(() => this.displaySuccess())
       .catch(err => console.log(`\nUnable to create project at '${this.projectPath}'`));
   }
 
@@ -36,6 +36,9 @@ class ProjectMaker {
   }
 
   getTokens() {
+    if(!this.template.tokens) {
+      return;
+    }
     console.log("\nSupply values for each token in this template.");
     if(this.hasDefaults()) {
       console.log("Default values are in parentheses. Press enter to accept default.");
@@ -132,6 +135,14 @@ class ProjectMaker {
     return fs.copy(this.template.path, this.projectPath, options)
       .then(() => this.projectPath);
   }
+
+  displaySuccess() {
+    console.log(`\nSuccess! Your project has been created at '${this.projectPath}'.\n`);
+    if(this.template.postMessage) {
+      console.log(this.template.postMessage);
+    }
+  }
+
 }
 
 module.exports = ProjectMaker;
