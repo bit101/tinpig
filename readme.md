@@ -12,7 +12,7 @@ The first time you run tinpig it will create a folder at `~/.congig/tinpig`. Thi
 
 ## Use
 
-To create a new project-based template, simply type `tinpig`. This will display a list of available templats for you to choose.
+To create a new project-based template, simply type `tinpig`. This will display a list of available templates for you to choose.
 
 --- image ---
 
@@ -52,7 +52,7 @@ Type `tinpig -l` or `tinpig --list` to see a list of available templates with de
 
 ## Adding new templates
 
-Additional templates will be posted at https://github.com/bit101/tinpig-template .
+Additional templates will be posted at https://github.com/bit101/tinpig-templates .
 
 Check out or download that repository and copy any templates you want into your local templates directory (`~/.config/tinpib/templates`). Again, feel free to customize them to make them fit your own use.
 
@@ -60,5 +60,5 @@ Check out or download that repository and copy any templates you want into your 
 
 There is a [template creation guide](https://github.com/bit101/tinpig/wiki/Tinpig-Template-Guide) on the repository's wiki page. This details the process and all of the elements that go into making a template.
 
-If you create a nice template and want to share, submit it as a pull request at https://github.com/bit101/tinpig-template .
+If you create a nice template and want to share, submit it as a pull request at https://github.com/bit101/tinpig-templates .
 
