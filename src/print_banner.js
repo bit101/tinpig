@@ -1,5 +1,5 @@
 function printBanner(showBanner) {
-  if(showBanner) {
+  if (showBanner) {
     console.log("  _   _             _       ");
     console.log(" | | (_)           (_)      ");
     console.log(" | |_ _ _ __  _ __  _  __ _ ");

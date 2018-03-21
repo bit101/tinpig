@@ -17,7 +17,7 @@ commander
 
 const tinpig = new Tinpig();
 
-if(commander.list) {
+if (commander.list) {
   tinpig.displayList();
 } else {
   tinpig.start(commander.template, commander.path);

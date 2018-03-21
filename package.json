@@ -5,11 +5,16 @@
   "repository": "https://github.com/bit101/tinpig",
   "preferGlobal": true,
   "bin": "index.js",
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint ."
+  },
   "author": "Keith Peters",
   "license": "MIT",
   "dependencies": {
     "commander": "^2.15.0",
+    "eslint": "^4.19.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
     "fs-extra": "^5.0.0",
     "replace": "^0.3.0"
   }
