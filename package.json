@@ -2,10 +2,10 @@
   "name": "tinpig",
   "version": "1.0.0",
   "description": "Create projects based on your own custom templates. Supports token replacement of content and file names at project creation time.",
+  "repository": "https://github.com/bit101/tinpig",
   "preferGlobal": true,
   "bin": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Keith Peters",
   "license": "MIT",
   "dependencies": {
