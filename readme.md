@@ -64,3 +64,8 @@ At its simplest, a template is simply a folder containing some files. But there 
 
 If you create a nice template and want to share, submit it as a pull request at https://github.com/bit101/tinpig-templates .
 
+## Configuration
+
+The `~/.config/tinpig/congig` holds current and future configuration values that will affect how the tool works.
+
+Currently, there's only a `"banner"` option, which defaults to `true`. If you don't like the banner that shows up when you run the utility, change that to `false`.
