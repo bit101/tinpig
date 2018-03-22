@@ -1,0 +1,25 @@
+{
+  "name": "Demo",
+  "description": "A dummy project showing most, if not all, the features available in a template.",
+  "author": "Keith Peters",
+  "contact": "https://github.com/bit101",
+  "tokens": [
+    {
+      "name": "PROJECT_NAME",
+      "default": "my_project"
+    },
+    {
+      "name": "SUBPROJECT_NAME",
+      "default": "my_project_section"
+    },
+    {
+      "name": "USER_NAME"
+    },
+    {
+      "name": "TITLE",
+      "default": "Best site in the world"
+    }
+  ],
+  "ignore": [ "template_readme.md" ],
+  "postMessage": "Congrats, you installed the template!"
+}
