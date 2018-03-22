@@ -12,7 +12,7 @@ class ProjectMaker {
       .then(() => this.replaceTokensInFiles())
       .then(() => this.renameFilesWithTokens(this.projectPath))
       .then(() => this.displaySuccess())
-      .catch(() => console.log(`\nUnable to create project at '${this.projectPath}'`));
+      // .catch(() => console.log(`\nUnable to create project at '${this.projectPath}'`));
   }
 
   getProjectPath(chosenPath) {
@@ -35,6 +35,7 @@ class ProjectMaker {
   }
 
   getTokens() {
+    this.tokens = {};
     if (!this.template.tokens) {
       return;
     }
@@ -43,7 +44,6 @@ class ProjectMaker {
       console.log("Default values are in parentheses. Press enter to accept default.");
     }
     console.log("");
-    this.tokens = {};
     // this is a way of chaining an arbitrary number of promises so that they all get fulfilled.
     // https://gist.github.com/anvk/5602ec398e4fdc521e2bf9940fd90f84
     const p = (promise, token) => promise.then(() => this.getTokenValuefor(token));
