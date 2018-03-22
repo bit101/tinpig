@@ -2,6 +2,11 @@
 
 tinpig is a simple command line utility for quickly creating projects of any kind. Projects are created from templates which are collections of folders and files. The folders and files can contain special tokens that can be replaced with other values when the project is created. You can use an existing temple as-s, modify a template, or create your own from scratch.
 
+## Requirements
+
+You'll need npm and an updated version of nodejs. Your version of nodejs should be 8.5.0 or higher, for the file copying functinality that was introduced at that point.
+
+
 ## Installation
 
 ``` shell
