@@ -42,6 +42,7 @@ class ProjectMaker {
     console.log("\nSupply values for each token in this template.");
     if (this.hasDefaults()) {
       console.log("Default values are in parentheses. Press enter to accept default.");
+      console.log("Be careful with tokens marked with a *. Spaces or special characters in these may break project functionality.");
     }
     console.log("");
     // this is a way of chaining an arbitrary number of promises so that they all get fulfilled.
@@ -67,7 +68,7 @@ class ProjectMaker {
       });
 
       const defaultValue = token.default ? ` (${token.default})` : "";
-      rl.question(`- ${token.name}${defaultValue}: `, (value) => {
+      rl.question(`${token.isPath ? "* " : ""}${token.name}${defaultValue}: `, (value) => {
         rl.close();
         this.tokens[token.name] = value || token.default;
         resolve();

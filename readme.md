@@ -27,6 +27,8 @@ When you choose a template, tinpig will ask you for a path for your new project.
 
 If the template includes any replaceable tokens, you will be prompted to provide values for each token. Some tokens may have default values that will be displayed in parentheses after the name of the token. Press enter to accept the default value, or type an alternate value.
 
+Some tokens may also be marked with a *. This indicates that the token is used as part of a file path or has other functionality where spaces or special characters could break the functionality of the project.
+
 ![screenshot 3](images/tinpig_03.png)
 
 tinpig will then create the project at the specified location, performing all of the token replacment. And you are done, ready to use your new project.
