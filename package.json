@@ -8,6 +8,16 @@
   "scripts": {
     "lint": "eslint ."
   },
+  "keywords": [
+    "template",
+    "project",
+    "project-template",
+    "templates",
+    "project-templates",
+    "project-creation",
+    "scaffolding",
+    "boilerplate "
+  ],
   "author": "Keith Peters",
   "license": "MIT",
   "dependencies": {

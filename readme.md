@@ -13,7 +13,7 @@ You'll need npm and an updated version of nodejs. Your version of nodejs should 
 npm install -g tinpig
 ```
 
-The first time you run tinpig it will create a folder at `~/.congig/tinpig`. This will contain a file called `config` and a folder called `templates` that holds a few sample templates. Feel free to modify these for your own use, delete them, and add new templates here. If you delete all the folders in this directory, tinpig will repopulate it with the sample templates the next time it runs.
+The first time you run tinpig it will create a folder at `~/.config/tinpig`. This will contain a file called `config` and a folder called `templates` that holds a few sample templates. Feel free to modify these for your own use, delete them, and add new templates here. If you delete all the folders in this directory, tinpig will repopulate it with the sample templates the next time it runs.
 
 ## Use
 
