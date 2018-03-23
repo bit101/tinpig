@@ -12,7 +12,7 @@ class ProjectMaker {
       .then(() => this.replaceTokensInFiles())
       .then(() => this.renameFilesWithTokens(this.projectPath))
       .then(() => this.displaySuccess())
-      // .catch(() => console.log(`\nUnable to create project at '${this.projectPath}'`));
+      .catch(() => console.log(`\nUnable to create project at '${this.projectPath}'`));
   }
 
   getProjectPath(chosenPath) {
