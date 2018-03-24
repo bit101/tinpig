@@ -80,7 +80,7 @@ class ProjectMaker {
     const fileSet = `${this.projectPath}/**`;
     Object.keys(this.tokens).forEach((token) => {
       const re = new RegExp("\\${" + token + "}", "g"); // eslint-disable-line
-      const result = replace.sync({
+      replace.sync({
         files: fileSet,
         from: re,
         to: this.tokens[token],
