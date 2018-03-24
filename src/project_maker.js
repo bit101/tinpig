@@ -1,6 +1,6 @@
 const fs = require("fs-extra");
 const path = require("path");
-const replace = require("replace");
+const replace = require("replace-in-file");
 const readline = require("readline");
 
 class ProjectMaker {
@@ -77,13 +77,13 @@ class ProjectMaker {
   }
 
   replaceTokensInFiles() {
+    const fileSet = `${this.projectPath}/**`;
     Object.keys(this.tokens).forEach((token) => {
-      replace({
-        regex: "\\${" + token + "}", // eslint-disable-line
-        replacement: this.tokens[token],
-        paths: [this.projectPath],
-        recursive: true,
-        silent: true,
+      const re = new RegExp("\\${" + token + "}", "g"); // eslint-disable-line
+      const result = replace.sync({
+        files: fileSet,
+        from: re,
+        to: this.tokens[token],
       });
     });
   }
