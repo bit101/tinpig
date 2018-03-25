@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 const replace = require("replace-in-file");
-const readline = require("readline");
+const inquirer = require("inquirer");
 
 class ProjectMaker {
   makeProject(chosenPath, template) {
@@ -16,64 +16,60 @@ class ProjectMaker {
   }
 
   getProjectPath(chosenPath) {
-    return new Promise((resolve) => {
-      if (chosenPath) {
-        this.projectPath = this.resolveHome(chosenPath);
-        resolve();
-      } else {
-        const rl = readline.createInterface({
-          input: process.stdin,
-          output: process.stdout,
+    if (chosenPath) {
+      this.projectPath = this.resolveHome(chosenPath);
+    } else {
+      return inquirer.prompt([
+        {
+          type: "input",
+          name: "projectPath",
+          message: "Project path",
+          prefix: "",
+          suffix: ":",
+        },
+      ])
+        .then((answer) => {
+          this.projectPath = this.resolveHome(answer.projectPath);
+          return this.projectPath;
         });
-        rl.question("Project directory: ", (projectPath) => {
-          rl.close();
-          this.projectPath = this.resolveHome(projectPath);
-          resolve();
-        });
-      }
-    });
+    }
   }
 
   getTokens() {
-    this.tokens = {};
     if (!this.template.tokens) {
+      this.tokens = {};
       return;
     }
-    console.log("\nSupply values for each token in this template.");
-    if (this.hasDefaults()) {
-      console.log("Default values are in parentheses. Press enter to accept default.");
-      console.log("Be careful with tokens marked with a *. Spaces or special characters in these may break project functionality.");
-    }
-    console.log("");
-    // this is a way of chaining an arbitrary number of promises so that they all get fulfilled.
-    // https://gist.github.com/anvk/5602ec398e4fdc521e2bf9940fd90f84
-    const p = (promise, token) => promise.then(() => this.getTokenValuefor(token));
-    return this.template.tokens.reduce(p, Promise.resolve());
-  }
 
-  hasDefaults() {
-    for (let i = 0; i < this.template.tokens.length; i++) {
-      if (this.template.tokens[i].default) {
+    const validator = (token) => { // eslint-disable-line
+      return (value) => {
+        if (token.isPath && value.indexOf(" ") !== -1) {
+          return "This value should not contain spaces.";
+        }
+        if (token.required && value === "") {
+          return "This value is required.";
+        }
         return true;
-      }
-    }
-    return false;
-  }
+      };
+    };
 
-  getTokenValuefor(token) {
-    return new Promise((resolve) => {
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-      });
-
-      const defaultValue = token.default ? ` (${token.default})` : "";
-      rl.question(`${token.isPath ? "* " : ""}${token.name}${defaultValue}: `, (value) => {
-        rl.close();
-        this.tokens[token.name] = value || token.default;
-        resolve();
-      });
+    const prompts = this.template.tokens.map((token) => {
+      const prompt = {
+        type: "input",
+        name: token.name,
+        message: token.name,
+        default: token.default,
+        prefix: "",
+        suffix: ":",
+        validate: validator(token),
+      };
+      return prompt;
     });
+    console.log("\nSupply values for each token in this template.");
+    return inquirer.prompt(prompts)
+      .then((answers) => {
+        this.tokens = answers;
+      });
   }
 
   replaceTokensInFiles() {

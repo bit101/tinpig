@@ -5,7 +5,8 @@
   "contact": "https://github.com/bit101",
   "tokens": [
     {
-      "name": "USER_NAME"
+      "name": "USER_NAME",
+      "required": true
     },
     {
       "name": "TITLE",
