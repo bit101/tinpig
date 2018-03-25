@@ -3,6 +3,7 @@ const path = require("path");
 const Configurator = require("./configurator");
 const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
+const resolveHome = require("./resolve_home");
 const printBanner = require("./print_banner");
 
 class Tinpig {
@@ -22,12 +23,12 @@ class Tinpig {
   }
 
   validatePath(filePath) {
-    if (fs.pathExistsSync(this.resolveHome(filePath))) {
+    if (fs.pathExistsSync(resolveHome(filePath))) {
       console.log(`\nSorry, something already exists at '${filePath}'. Try a different path.`);
       process.exit();
     }
 
-    const parentDir = path.dirname(this.resolveHome(filePath));
+    const parentDir = path.dirname(resolveHome(filePath));
     try {
       fs.accessSync(parentDir, fs.constants.W_OK);
     } catch (err) {
@@ -36,15 +37,6 @@ class Tinpig {
     }
     return Promise.resolve();
   }
-
-  // todo: this is duplicated now. move to a util
-  resolveHome(filepath) {
-    if (filepath[0] === '~') {
-      return path.join(process.env.HOME, filepath.slice(1));
-    }
-    return filepath;
-  }
-
 
   setConfig(config) {
     this.config = config;

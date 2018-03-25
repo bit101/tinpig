@@ -2,6 +2,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
+const resolveHome = require("./resolve_home");
 
 class ProjectMaker {
   makeProject(chosenPath, template) {
@@ -17,7 +18,7 @@ class ProjectMaker {
 
   getProjectPath(chosenPath) {
     if (chosenPath) {
-      this.projectPath = this.resolveHome(chosenPath);
+      this.projectPath = resolveHome(chosenPath);
       return Promise.resolve();
     } else {
       return inquirer.prompt([
@@ -30,7 +31,7 @@ class ProjectMaker {
         },
       ])
         .then((answer) => {
-          this.projectPath = this.resolveHome(answer.projectPath);
+          this.projectPath = resolveHome(answer.projectPath);
           return this.projectPath;
         });
     }
@@ -104,13 +105,6 @@ class ProjectMaker {
 
   isDir(thePath) {
     return fs.statSync(thePath).isDirectory();
-  }
-
-  resolveHome(filepath) {
-    if (filepath[0] === '~') {
-      return path.join(process.env.HOME, filepath.slice(1));
-    }
-    return filepath;
   }
 
   copyTemplate() {
