@@ -18,6 +18,7 @@ class ProjectMaker {
   getProjectPath(chosenPath) {
     if (chosenPath) {
       this.projectPath = this.resolveHome(chosenPath);
+      return Promise.resolve();
     } else {
       return inquirer.prompt([
         {
