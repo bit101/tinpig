@@ -40,11 +40,17 @@ class ProjectMaker {
       this.tokens = {};
       return;
     }
-    const pathValidator = (value) => {
-      if (value.indexOf(" ") === -1) {
+
+    const validator = (token) => { // eslint-disable-line
+      return (value) => {
+        if (token.isPath && value.indexOf(" ") !== -1) {
+          return "This value should not contain spaces.";
+        }
+        if (token.required && value === "") {
+          return "This value is required.";
+        }
         return true;
-      }
-      return "This value should not contain spaces.";
+      };
     };
 
     const prompts = this.template.tokens.map((token) => {
@@ -55,10 +61,8 @@ class ProjectMaker {
         default: token.default,
         prefix: "",
         suffix: ":",
+        validate: validator(token),
       };
-      if (token.isPath) {
-        prompt.validate = pathValidator;
-      }
       return prompt;
     });
     console.log("\nSupply values for each token in this template.");
