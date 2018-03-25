@@ -23,6 +23,7 @@
   "dependencies": {
     "commander": "^2.15.1",
     "fs-extra": "^5.0.0",
+    "inquirer": "^5.1.0",
     "replace-in-file": "^3.4.0"
   },
   "devDependencies": {

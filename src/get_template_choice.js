@@ -1,30 +1,23 @@
-const readline = require("readline");
+const inquirer = require("inquirer");
 
 function getTemplateChoice(templates) {
-  return new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    console.log("\nAvailable templates:\n");
-
-    for (let i = 0; i < templates.length; i++) {
-      console.log(`${i + 1}. ${templates[i].name}`);
-    }
-
-    rl.question("\nChoice (q = quit): ", (answer) => {
-      rl.close();
-      if (answer.toLowerCase() === "q") {
-        return;
+  const templateNames = templates.map(template => template.name);
+  const exitPrompt = ">> Exit <<";
+  templateNames.push(exitPrompt);
+  return inquirer.prompt([{
+    type: "list",
+    name: "choice",
+    message: "\nChoose a template",
+    choices: templateNames,
+    prefix: "",
+    suffix: ":",
+  }])
+    .then((result) => {
+      if (result.choice === exitPrompt) {
+        process.exit();
       }
-      if (answer < "1" || answer > templates.length.toString()) {
-        console.log(`${answer} is not a valid choice. Choose a number from 1 to ${this.templates.length}.`);
-      } else {
-        resolve(templates[answer - 1]);
-      }
+      return templates.find(template => template.name === result.choice);
     });
-  });
 }
 
 module.exports = getTemplateChoice;
