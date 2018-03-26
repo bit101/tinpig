@@ -19,13 +19,13 @@ The first time you run tinpig it will create a folder at `~/.config/tinpig`. Thi
 
 To create a new project-based template, simply type `tinpig`. This will display a list of available templates for you to choose from.
 
-![screenshot](images/tinpig.png)
+![screenshot](images/tinpig_01.png)
 
 When you choose a template, tinpig will ask you for a path for your new project. Enter a directory name to create a project with that name in the current directory, or an absolute or relative path to some other location.
 
-If the template includes any replaceable tokens, you will be prompted to provide values for each token. Some tokens may have default values that will be displayed in parentheses after the name of the token. Press enter to accept the default value, or type an alternate value.
+If the template includes any replaceable tokens, you will be prompted to provide values for each token. Some tokens may have default values that will be displayed after the name of the token. Press enter to accept the default value, or type an alternate value.
 
-Some tokens may also be marked with a *. This indicates that the token is used as part of a file path or has other functionality where spaces or special characters could break the functionality of the project.
+![screenshot](images/tinpig_02.png)
 
 tinpig will then create the project at the specified location, performing all of the token replacment. And you are done, ready to use your new project.
 
