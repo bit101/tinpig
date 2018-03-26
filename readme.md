@@ -4,7 +4,7 @@ tinpig is a simple command line utility for quickly creating projects of any kin
 
 ## Requirements
 
-You'll need npm and an updated version of nodejs. Your version of nodejs should be 8.5.0 or higher, for the file copying functinality that was introduced at that point.
+You'll need npm and an updated version of nodejs. Your version of nodejs should be 8.5.0 or higher, for the file copying functionality that was introduced at that point.
 
 
 ## Installation
