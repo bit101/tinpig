@@ -1,8 +1,7 @@
 const fs = require("fs-extra");
-const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
-const resolveHome = require("./resolve_home");
+const { resolveHome, validatePath } = require("./file_utils");
 
 class ProjectMaker {
   makeProject(chosenPath, template) {
@@ -20,21 +19,20 @@ class ProjectMaker {
     if (chosenPath) {
       this.projectPath = resolveHome(chosenPath);
       return Promise.resolve();
-    } else {
-      return inquirer.prompt([
-        {
-          type: "input",
-          name: "projectPath",
-          message: "Project path",
-          prefix: "",
-          suffix: ":",
-        },
-      ])
-        .then((answer) => {
-          this.projectPath = resolveHome(answer.projectPath);
-          return this.projectPath;
-        });
     }
+    return inquirer.prompt([
+      {
+        type: "input",
+        name: "projectPath",
+        message: "Project path",
+        prefix: "",
+        suffix: ":",
+        validate: validatePath,
+      },
+    ])
+      .then((answer) => {
+        this.projectPath = resolveHome(answer.projectPath);
+      });
   }
 
   getTokens() {
