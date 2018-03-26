@@ -3,7 +3,6 @@ const fs = require("fs-extra");
 const { CONFIG_FILE, TEMPLATES_DIR } = require("./constants");
 
 const DEFAULT_CONFIG = {
-  banner: true,
 };
 
 class Configurator {

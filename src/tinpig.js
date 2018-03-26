@@ -2,7 +2,6 @@ const Configurator = require("./configurator");
 const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
 const { validatePathOrExit } = require("./file_utils");
-const printBanner = require("./print_banner");
 
 class Tinpig {
   start(templateName, filePath) {
@@ -13,7 +12,6 @@ class Tinpig {
 
     configurator.configure()
       .then(config      => this.setConfig(config))
-      .then(()          => printBanner(this.config.banner))
       .then(()          => validatePathOrExit(filePath))
       .then(()          => templateManager.getTemplate(templateName))
       .then(template    => projectMaker.makeProject(filePath, template))
@@ -30,7 +28,6 @@ class Tinpig {
 
     configurator.configure()
       .then(config => this.setConfig(config))
-      .then(() => printBanner(this.config.banner))
       .then(() => templateManager.displayAvailableTemplates())
       .catch(() => console.log("\nTinpig encountered an error and is unable to display templates."));
   }

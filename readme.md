@@ -69,6 +69,5 @@ If you create a nice template and want to share, submit it as a pull request at 
 
 ## Configuration
 
-The `~/.config/tinpig/config` file holds current and future configuration values that will affect how the tool works.
+The `~/.config/tinpig/config` file will hold configuration values that will affect how the tool works.
 
-Currently, there's only a `"banner"` option, which defaults to `true`. If you don't like the banner that shows up when you run the utility, change that to `false`.
