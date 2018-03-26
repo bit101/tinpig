@@ -36,13 +36,14 @@ function validatePathOrExit(filePath) {
 }
 
 function validatePath(filePath) {
-  if (filePath) {
-    if (checkPathExists(filePath)) {
-      return `'${filePath}' already exists.`;
-    }
-    if (!checkPathAccess(filePath)) {
-      return `You don't have access to '${filePath}'.`;
-    }
+  if (!filePath) {
+    return "Project path cannot be empty.";
+  }
+  if (checkPathExists(filePath)) {
+    return `'${filePath}' already exists.`;
+  }
+  if (!checkPathAccess(filePath)) {
+    return `You don't have access to '${filePath}'.`;
   }
   return true;
 }
