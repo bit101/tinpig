@@ -1,6 +1,6 @@
 {
   "name": "tinpig",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Create projects based on your own custom templates. Supports token replacement of content and file names at project creation time.",
   "repository": "https://github.com/bit101/tinpig",
   "preferGlobal": true,
