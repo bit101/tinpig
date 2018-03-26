@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
-const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
+const { resolveHome, validatePath } = require("./file_utils");
 
 class ProjectMaker {
   makeProject(chosenPath, template) {
@@ -17,22 +17,22 @@ class ProjectMaker {
 
   getProjectPath(chosenPath) {
     if (chosenPath) {
-      this.projectPath = this.resolveHome(chosenPath);
-    } else {
-      return inquirer.prompt([
-        {
-          type: "input",
-          name: "projectPath",
-          message: "Project path",
-          prefix: "",
-          suffix: ":",
-        },
-      ])
-        .then((answer) => {
-          this.projectPath = this.resolveHome(answer.projectPath);
-          return this.projectPath;
-        });
+      this.projectPath = resolveHome(chosenPath);
+      return Promise.resolve();
     }
+    return inquirer.prompt([
+      {
+        type: "input",
+        name: "projectPath",
+        message: "Project path",
+        prefix: "",
+        suffix: ":",
+        validate: validatePath,
+      },
+    ])
+      .then((answer) => {
+        this.projectPath = resolveHome(answer.projectPath);
+      });
   }
 
   getTokens() {
@@ -103,13 +103,6 @@ class ProjectMaker {
 
   isDir(thePath) {
     return fs.statSync(thePath).isDirectory();
-  }
-
-  resolveHome(filepath) {
-    if (filepath[0] === '~') {
-      return path.join(process.env.HOME, filepath.slice(1));
-    }
-    return filepath;
   }
 
   copyTemplate() {

@@ -42,7 +42,7 @@ class TemplateManager  {
   }
 
   getTemplateFromArgsOrChoice(templateName) {
-    if (templateName) {
+    if (templateName && typeof templateName === "string") {
       return this.getTemplateFromArgs(templateName);
     }
     return getTemplateChoice(this.templates);
@@ -54,7 +54,9 @@ class TemplateManager  {
         return this.templates[i];
       }
     }
-    throw new Error(`\n'${templateName}' is not a valid template.`);
+    console.log(`\nSorry, '${templateName}' is not a valid template`);
+    console.log("Try one of these:");
+    return getTemplateChoice(this.templates);
   }
 
   //--------------------------------------
