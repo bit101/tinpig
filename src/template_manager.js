@@ -34,10 +34,15 @@ class TemplateManager  {
 
   loadTemplate(templateName, index) {
     const path = `${TEMPLATES_DIR}/${templateName}`;
-    return fs.readJSON(`${path}/tinpig.json`)
+    const manifestPath = `${TEMPLATES_DIR}/${templateName}/tinpig.json`;
+    if (!fs.pathExistsSync(manifestPath)) {
+      // If there is no manifest file, skip it. Path could be a .DS_Store or something.
+      return Promise.resolve();
+    }
+    return fs.readJSON(manifestPath)
       .then((template) => {
         template.path = path;
-        this.templates[index] = template;
+        this.templates.push(template);
       });
   }
 
