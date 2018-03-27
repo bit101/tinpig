@@ -1,14 +1,19 @@
 const fs = require("fs-extra");
 const getTemplateChoice = require("./get_template_choice");
 
-const { TEMPLATES_DIR, SAMPLE_PROJECTS } = require("./constants");
+const { SAMPLE_PROJECTS } = require("./constants");
 
 class TemplateManager  {
+  setTemplatesDir(templatesDir) {
+    this.templatesDir = templatesDir;
+  }
+
   //--------------------------------------
   // Get template by arg or ui choice
   //--------------------------------------
   getTemplate(templateName) {
-    return fs.readdir(TEMPLATES_DIR)
+    return fs.ensureDir(this.templatesDir)
+      .then(()            => fs.readdir(this.templatesDir))
       .then(templateNames => this.createTemplates(templateNames))
       .then(()            => this.readTemplates())
       .then(templates     => this.loadTemplates(templates))
@@ -17,24 +22,23 @@ class TemplateManager  {
 
   createTemplates(templates) {
     if (templates.length === 0) {
-      return fs.copy(SAMPLE_PROJECTS, TEMPLATES_DIR);
+      return fs.copy(SAMPLE_PROJECTS, this.templatesDir);
     }
     return null;
   }
 
   readTemplates() {
-    return fs.readdir(TEMPLATES_DIR);
+    return fs.readdir(this.templatesDir);
   }
 
   loadTemplates(templateNames) {
     this.templates = [];
-    return Promise.all(templateNames.map((templateName, index) =>
-      this.loadTemplate(templateName, index)));
+    return Promise.all(templateNames.map(templateName => this.loadTemplate(templateName)));
   }
 
-  loadTemplate(templateName, index) {
-    const path = `${TEMPLATES_DIR}/${templateName}`;
-    const manifestPath = `${TEMPLATES_DIR}/${templateName}/tinpig.json`;
+  loadTemplate(templateName) {
+    const path = `${this.templatesDir}/${templateName}`;
+    const manifestPath = `${this.templatesDir}/${templateName}/tinpig.json`;
     if (!fs.pathExistsSync(manifestPath)) {
       // If there is no manifest file, skip it. Path could be a .DS_Store or something.
       return Promise.resolve();
@@ -68,7 +72,9 @@ class TemplateManager  {
   // List templates only (tinpig --list)
   //--------------------------------------
   displayAvailableTemplates() {
-    return this.readTemplates()
+    // TODO. This flow may need some adjusting to make sure it works the same way as getTemplate.
+    return fs.ensureDir(this.templatesDir)
+      .then(() => this.readTemplates())
       .then(templateNames => this.createTemplates(templateNames))
       .then(() => this.readTemplates())
       .then(templates => this.loadTemplates(templates))

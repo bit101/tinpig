@@ -3,13 +3,12 @@ const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
 const { validatePathOrExit } = require("./file_utils");
 
+const configurator = new Configurator();
+const templateManager = new TemplateManager();
+
 class Tinpig {
   start(templateName, filePath) {
-    const configurator = new Configurator();
-    const templateManager = new TemplateManager();
     const projectMaker = new ProjectMaker();
-
-
     configurator.configure()
       .then(config      => this.setConfig(config))
       .then(()          => validatePathOrExit(filePath))
@@ -20,12 +19,11 @@ class Tinpig {
 
   setConfig(config) {
     this.config = config;
+    templateManager.setTemplatesDir(this.config.templatesDir);
+    return Promise.resolve();
   }
 
   displayList() {
-    const configurator = new Configurator();
-    const templateManager = new TemplateManager();
-
     configurator.configure()
       .then(config => this.setConfig(config))
       .then(() => templateManager.displayAvailableTemplates())

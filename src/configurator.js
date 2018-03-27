@@ -8,20 +8,15 @@ const DEFAULT_CONFIG = {
 
 class Configurator {
   configure() {
-    this.getConfig()
-      .then(config => this.setConfig(config))
-      .then(() => fs.ensureDir(this.config.templatesDir))
-      .then(() => this.config);
+    return fs.ensureDir(TINPIG_DIR)
+      .then(() => this.getConfig());
   }
 
   getConfig() {
-    return fs.pathExists(CONFIG_FILE)
-      .then((exists) => {
-        if (exists) {
-          return this.readConfig();
-        }
-        return this.createConfig();
-      });
+    if (fs.pathExistsSync(CONFIG_FILE)) {
+      return this.readConfig();
+    }
+    return this.createConfig();
   }
 
   readConfig() {
