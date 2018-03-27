@@ -4,14 +4,11 @@ const getTemplateChoice = require("./get_template_choice");
 const { SAMPLE_PROJECTS } = require("./constants");
 
 class TemplateManager  {
-  setTemplatesDir(templatesDir) {
-    this.templatesDir = templatesDir;
-  }
-
   //--------------------------------------
   // Get template by arg or ui choice
   //--------------------------------------
-  getTemplate(templateName) {
+  getTemplate(templateName, templatesDir) {
+    this.templatesDir = templatesDir;
     return fs.ensureDir(this.templatesDir)
       .then(()            => fs.readdir(this.templatesDir))
       .then(templateNames => this.createTemplates(templateNames))
@@ -71,7 +68,8 @@ class TemplateManager  {
   //--------------------------------------
   // List templates only (tinpig --list)
   //--------------------------------------
-  displayAvailableTemplates() {
+  displayAvailableTemplates(templatesDir) {
+    this.templatesDir = templatesDir;
     // TODO. This flow may need some adjusting to make sure it works the same way as getTemplate.
     return fs.ensureDir(this.templatesDir)
       .then(() => this.readTemplates())

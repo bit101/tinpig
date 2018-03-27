@@ -7,26 +7,31 @@ const configurator = new Configurator();
 const templateManager = new TemplateManager();
 
 class Tinpig {
-  start(templateName, filePath) {
+  start(templateName, filePath, customTemplatesDir) {
+    this.customTemplatesDir = customTemplatesDir;
     const projectMaker = new ProjectMaker();
     configurator.configure()
       .then(config      => this.setConfig(config))
       .then(()          => validatePathOrExit(filePath))
-      .then(()          => templateManager.getTemplate(templateName))
+      .then(()          => templateManager.getTemplate(templateName, this.getTemplatesDir()))
       .then(template    => projectMaker.makeProject(filePath, template))
       .catch(err        => console.log(err));
   }
 
   setConfig(config) {
     this.config = config;
-    templateManager.setTemplatesDir(this.config.templatesDir);
     return Promise.resolve();
   }
 
-  displayList() {
+  getTemplatesDir() {
+    return this.customTemplatesDir || this.config.templatesDir;
+  }
+
+  displayList(customTemplatesDir) {
+    this.customTemplatesDir = customTemplatesDir;
     configurator.configure()
       .then(config => this.setConfig(config))
-      .then(() => templateManager.displayAvailableTemplates())
+      .then(() => templateManager.displayAvailableTemplates(this.getTemplatesDir()))
       .catch(() => console.log("\nTinpig encountered an error and is unable to display templates."));
   }
 }
