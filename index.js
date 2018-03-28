@@ -16,16 +16,17 @@ commander.on("--help", () => {
 });
 
 commander
-  .version(require('./package.json').version, "-v, --version")
-  .option("-l, --list", "list all available templates")
   .option("-t, --template [template]", "specify which template to use")
   .option("-p, --path [path]", "specify path for project")
+  .option("-d, --directory [directory]", "path to a folder of custom templates")
+  .option("-l, --list", "list all available templates")
+  .version(require('./package.json').version, "-v, --version")
   .parse(process.argv);
 
 const tinpig = new Tinpig();
 
 if (commander.list) {
-  tinpig.displayList();
+  tinpig.displayList(commander.directory);
 } else {
-  tinpig.start(commander.template, commander.path);
+  tinpig.start(commander.template, commander.path, commander.directory);
 }

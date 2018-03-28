@@ -1,49 +1,15 @@
 const fs = require("fs-extra");
 const getTemplateChoice = require("./get_template_choice");
 
-const { TEMPLATES_DIR, SAMPLE_PROJECTS } = require("./constants");
+const { SAMPLE_PROJECTS } = require("./constants");
 
 class TemplateManager  {
   //--------------------------------------
   // Get template by arg or ui choice
   //--------------------------------------
-  getTemplate(templateName) {
-    return fs.readdir(TEMPLATES_DIR)
-      .then(templateNames => this.createTemplates(templateNames))
-      .then(()            => this.readTemplates())
-      .then(templates     => this.loadTemplates(templates))
-      .then(()            => this.getTemplateFromArgsOrChoice(templateName));
-  }
-
-  createTemplates(templates) {
-    if (templates.length === 0) {
-      return fs.copy(SAMPLE_PROJECTS, TEMPLATES_DIR);
-    }
-    return null;
-  }
-
-  readTemplates() {
-    return fs.readdir(TEMPLATES_DIR);
-  }
-
-  loadTemplates(templateNames) {
-    this.templates = [];
-    return Promise.all(templateNames.map((templateName, index) =>
-      this.loadTemplate(templateName, index)));
-  }
-
-  loadTemplate(templateName, index) {
-    const path = `${TEMPLATES_DIR}/${templateName}`;
-    const manifestPath = `${TEMPLATES_DIR}/${templateName}/tinpig.json`;
-    if (!fs.pathExistsSync(manifestPath)) {
-      // If there is no manifest file, skip it. Path could be a .DS_Store or something.
-      return Promise.resolve();
-    }
-    return fs.readJSON(manifestPath)
-      .then((template) => {
-        template.path = path;
-        this.templates.push(template);
-      });
+  getTemplate(templateName, templatesDir) {
+    return this.prepTemplates(templatesDir)
+      .then(() => this.getTemplateFromArgsOrChoice(templateName));
   }
 
   getTemplateFromArgsOrChoice(templateName) {
@@ -67,11 +33,8 @@ class TemplateManager  {
   //--------------------------------------
   // List templates only (tinpig --list)
   //--------------------------------------
-  displayAvailableTemplates() {
-    return this.readTemplates()
-      .then(templateNames => this.createTemplates(templateNames))
-      .then(() => this.readTemplates())
-      .then(templates => this.loadTemplates(templates))
+  displayAvailableTemplates(templatesDir) {
+    this.prepTemplates(templatesDir)
       .then(() => this.printTemplateList());
   }
 
@@ -82,6 +45,49 @@ class TemplateManager  {
       console.log(`${i + 1}. ${template.name}: ${template.description}`);
     }
     console.log("");
+  }
+
+  //--------------------------------------
+  // Common
+  //--------------------------------------
+  prepTemplates(templatesDir) {
+    this.templatesDir = templatesDir;
+    return fs.ensureDir(this.templatesDir)
+      .then(()            => fs.readdir(this.templatesDir))
+      .then(templateNames => this.createTemplates(templateNames))
+      .then(()            => this.readTemplates())
+      .then(templates     => this.loadTemplates(templates));
+  }
+
+  createTemplates(templates) {
+    if (templates.length === 0) {
+      return fs.copy(SAMPLE_PROJECTS, this.templatesDir);
+    }
+    return Promise.resolve();
+  }
+
+  readTemplates() {
+    return fs.readdir(this.templatesDir);
+  }
+
+  loadTemplates(templateNames) {
+    this.templates = [];
+    return Promise.all(templateNames.map(templateName => this.loadTemplate(templateName)));
+  }
+
+  loadTemplate(templateName) {
+    const path = `${this.templatesDir}/${templateName}`;
+    const manifestPath = `${this.templatesDir}/${templateName}/tinpig.json`;
+    if (!fs.pathExistsSync(manifestPath)) {
+      // If there is no manifest file, skip it.
+      // Path could be a .DS_Store or something.
+      return Promise.resolve();
+    }
+    return fs.readJSON(manifestPath)
+      .then((template) => {
+        template.path = path;
+        this.templates.push(template);
+      });
   }
 }
 
