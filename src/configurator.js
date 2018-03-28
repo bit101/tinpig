@@ -20,7 +20,17 @@ class Configurator {
   }
 
   readConfig() {
-    return fs.readJSON(CONFIG_FILE);
+    return fs.readJSON(CONFIG_FILE)
+      .then(config => this.updateConfig(config));
+  }
+
+  updateConfig(config) {
+    if (!config.templatesDir) {
+      config.templatesDir = DEFAULT_CONFIG.templatesDir;
+      return fs.writeJSON(CONFIG_FILE, config, { spaces: 2 })
+        .then(() => config);
+    }
+    return config;
   }
 
   createConfig() {

@@ -8,43 +8,8 @@ class TemplateManager  {
   // Get template by arg or ui choice
   //--------------------------------------
   getTemplate(templateName, templatesDir) {
-    this.templatesDir = templatesDir;
-    return fs.ensureDir(this.templatesDir)
-      .then(()            => fs.readdir(this.templatesDir))
-      .then(templateNames => this.createTemplates(templateNames))
-      .then(()            => this.readTemplates())
-      .then(templates     => this.loadTemplates(templates))
-      .then(()            => this.getTemplateFromArgsOrChoice(templateName));
-  }
-
-  createTemplates(templates) {
-    if (templates.length === 0) {
-      return fs.copy(SAMPLE_PROJECTS, this.templatesDir);
-    }
-    return null;
-  }
-
-  readTemplates() {
-    return fs.readdir(this.templatesDir);
-  }
-
-  loadTemplates(templateNames) {
-    this.templates = [];
-    return Promise.all(templateNames.map(templateName => this.loadTemplate(templateName)));
-  }
-
-  loadTemplate(templateName) {
-    const path = `${this.templatesDir}/${templateName}`;
-    const manifestPath = `${this.templatesDir}/${templateName}/tinpig.json`;
-    if (!fs.pathExistsSync(manifestPath)) {
-      // If there is no manifest file, skip it. Path could be a .DS_Store or something.
-      return Promise.resolve();
-    }
-    return fs.readJSON(manifestPath)
-      .then((template) => {
-        template.path = path;
-        this.templates.push(template);
-      });
+    return this.prepTemplates(templatesDir)
+      .then(() => this.getTemplateFromArgsOrChoice(templateName));
   }
 
   getTemplateFromArgsOrChoice(templateName) {
@@ -69,13 +34,7 @@ class TemplateManager  {
   // List templates only (tinpig --list)
   //--------------------------------------
   displayAvailableTemplates(templatesDir) {
-    this.templatesDir = templatesDir;
-    // TODO. This flow may need some adjusting to make sure it works the same way as getTemplate.
-    return fs.ensureDir(this.templatesDir)
-      .then(() => this.readTemplates())
-      .then(templateNames => this.createTemplates(templateNames))
-      .then(() => this.readTemplates())
-      .then(templates => this.loadTemplates(templates))
+    this.prepTemplates(templatesDir)
       .then(() => this.printTemplateList());
   }
 
@@ -86,6 +45,49 @@ class TemplateManager  {
       console.log(`${i + 1}. ${template.name}: ${template.description}`);
     }
     console.log("");
+  }
+
+  //--------------------------------------
+  // Common
+  //--------------------------------------
+  prepTemplates(templatesDir) {
+    this.templatesDir = templatesDir;
+    return fs.ensureDir(this.templatesDir)
+      .then(()            => fs.readdir(this.templatesDir))
+      .then(templateNames => this.createTemplates(templateNames))
+      .then(()            => this.readTemplates())
+      .then(templates     => this.loadTemplates(templates));
+  }
+
+  createTemplates(templates) {
+    if (templates.length === 0) {
+      return fs.copy(SAMPLE_PROJECTS, this.templatesDir);
+    }
+    return Promise.resolve();
+  }
+
+  readTemplates() {
+    return fs.readdir(this.templatesDir);
+  }
+
+  loadTemplates(templateNames) {
+    this.templates = [];
+    return Promise.all(templateNames.map(templateName => this.loadTemplate(templateName)));
+  }
+
+  loadTemplate(templateName) {
+    const path = `${this.templatesDir}/${templateName}`;
+    const manifestPath = `${this.templatesDir}/${templateName}/tinpig.json`;
+    if (!fs.pathExistsSync(manifestPath)) {
+      // If there is no manifest file, skip it.
+      // Path could be a .DS_Store or something.
+      return Promise.resolve();
+    }
+    return fs.readJSON(manifestPath)
+      .then((template) => {
+        template.path = path;
+        this.templates.push(template);
+      });
   }
 }
 
