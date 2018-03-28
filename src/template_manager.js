@@ -7,8 +7,9 @@ class TemplateManager  {
   //--------------------------------------
   // Get template by arg or ui choice
   //--------------------------------------
-  getTemplate(templateName, templatesDir) {
-    return this.prepTemplates(templatesDir)
+  getTemplate(templateName, config) {
+    this.config = config;
+    return this.prepTemplates(config.templatesDir)
       .then(() => this.getTemplateFromArgsOrChoice(templateName));
   }
 
@@ -33,8 +34,9 @@ class TemplateManager  {
   //--------------------------------------
   // List templates only (tinpig --list)
   //--------------------------------------
-  displayAvailableTemplates(templatesDir) {
-    this.prepTemplates(templatesDir)
+  displayAvailableTemplates(config) {
+    this.config = config;
+    this.prepTemplates(config.templatesDir)
       .then(() => this.printTemplateList());
   }
 

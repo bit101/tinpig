@@ -4,8 +4,9 @@ const inquirer = require("inquirer");
 const { resolveHome, validatePath } = require("./file_utils");
 
 class ProjectMaker {
-  makeProject(chosenPath, template) {
+  makeProject(chosenPath, template, config) {
     this.template = template;
+    this.config = config;
     return this.getProjectPath(chosenPath)
       .then(() => this.getTokens())
       .then(() => this.copyTemplate())
@@ -67,9 +68,13 @@ class ProjectMaker {
     });
     console.log("\nSupply values for each token in this template.");
     return inquirer.prompt(prompts)
-      .then((answers) => {
-        this.tokens = answers;
-      });
+      .then(answers => this.addSpecialTokens(answers));
+  }
+
+  addSpecialTokens(answers) {
+    answers.TINPIG_USER_NAME = this.config.userName;
+    answers.TINPIG_USER_EMAIL = this.config.userEmail;
+    this.tokens = answers;
   }
 
   replaceTokensInFiles() {
