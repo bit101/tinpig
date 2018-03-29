@@ -8,15 +8,15 @@ const templateManager = new TemplateManager();
 
 class Tinpig {
   async start(templateName, filePath, customTemplatesDir) {
-    // try {
+    try {
       const projectMaker = new ProjectMaker();
       const config = await configurator.configure(customTemplatesDir);
       await validatePathOrExit(filePath);
       const template = await templateManager.getTemplate(templateName, config);
       await projectMaker.makeProject(filePath, template, config);
-    // } catch (err) {
-    //   console.log("\nTinpig encountered an error and is unable to create a project.");
-    // }
+    } catch (err) {
+      console.log("\nTinpig encountered an error and is unable to create a project.");
+    }
   }
 
   async displayList(customTemplatesDir) {

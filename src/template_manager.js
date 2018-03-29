@@ -52,14 +52,15 @@ class TemplateManager  {
   async prepTemplates(templatesDir) {
     this.templatesDir = templatesDir;
     await fs.ensureDir(this.templatesDir);
-    const templateNames = await fs.readdir(this.templatesDir);
-    await this.createTemplates(templateNames);
+    const templatePaths = await fs.readdir(this.templatesDir);
+    await this.createTemplates(templatePaths);
     const templates = await this.readTemplates();
     await this.loadTemplates(templates);
+    this.verifyTemplates();
   }
 
-  async createTemplates(templates) {
-    if (templates.length === 0) {
+  async createTemplates(templatePaths) {
+    if (templatePaths.length === 0) {
       await fs.copy(SAMPLE_PROJECTS, this.templatesDir);
     }
   }
@@ -68,9 +69,9 @@ class TemplateManager  {
     return fs.readdir(this.templatesDir);
   }
 
-  async loadTemplates(templateNames) {
+  async loadTemplates(templatePaths) {
     this.templates = [];
-    return Promise.all(templateNames.map(templateName => this.loadTemplate(templateName)));
+    return Promise.all(templatePaths.map(templateName => this.loadTemplate(templateName)));
   }
 
   async loadTemplate(templateName) {
@@ -84,6 +85,25 @@ class TemplateManager  {
     const template = await fs.readJSON(manifestPath);
     template.path = path;
     this.templates.push(template);
+  }
+
+  verifyTemplates() {
+    const names = [];
+    const conflictedTemplates = [];
+    for (let i = 0; i < this.templates.length; i++) {
+      const { name } = this.templates[i];
+      if (names.indexOf(name) !== -1) {
+        conflictedTemplates.push(name);
+      }
+      names.push(name);
+    }
+    if (conflictedTemplates.length > 0) {
+      console.log("\nDuplicate template names found in templates directory:");
+      for (let i = 0; i < conflictedTemplates.length; i++) {
+        console.log(`  ${conflictedTemplates[i]}`);
+      }
+      console.log("This could make it difficult to select the correct template.");
+    }
   }
 }
 
