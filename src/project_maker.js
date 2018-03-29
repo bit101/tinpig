@@ -4,42 +4,43 @@ const inquirer = require("inquirer");
 const { resolveHome, validatePath } = require("./file_utils");
 
 class ProjectMaker {
-  makeProject(chosenPath, template, config) {
+  async makeProject(chosenPath, template, config) {
     this.template = template;
     this.config = config;
-    return this.getProjectPath(chosenPath)
-      .then(() => this.getTokens())
-      .then(() => this.copyTemplate())
-      .then(() => this.replaceTokensInFiles())
-      .then(() => this.renameFilesWithTokens(this.projectPath))
-      .then(() => this.displaySuccess())
-      .catch(() => console.log(`\nUnable to create project at '${this.projectPath}'`));
-  }
 
-  getProjectPath(chosenPath) {
-    if (chosenPath) {
-      this.projectPath = resolveHome(chosenPath);
-      return Promise.resolve();
+    const projectPath = await this.getProjectPath(chosenPath);
+    const tokens = await this.getTokens();
+    try {
+      await this.copyTemplate(projectPath);
+      await this.replaceTokensInFiles(projectPath, tokens);
+      await this.renameFilesWithTokens(projectPath, tokens);
+      await this.displaySuccess(projectPath);
+    } catch (err) {
+      console.log(`\nUnable to create project at '${projectPath}'`);
     }
-    return inquirer.prompt([
-      {
-        type: "input",
-        name: "projectPath",
-        message: "Project path",
-        prefix: "",
-        suffix: ":",
-        validate: validatePath,
-      },
-    ])
-      .then((answer) => {
-        this.projectPath = resolveHome(answer.projectPath);
-      });
   }
 
-  getTokens() {
+  async getProjectPath(chosenPath) {
+    if (chosenPath) {
+      return resolveHome(chosenPath);
+    }
+    const prompt = [{
+      type: "input",
+      name: "projectPath",
+      message: "Project path",
+      prefix: "",
+      suffix: ":",
+      validate: validatePath,
+    }];
+    const answer = await inquirer.prompt(prompt);
+    return resolveHome(answer.projectPath);
+  }
+
+  async getTokens() {
     if (!this.template.tokens) {
-      this.tokens = {};
-      return;
+      const tokens = {};
+      this.addSpecialTokens(tokens);
+      return tokens;
     }
 
     const validator = (token) => { // eslint-disable-line
@@ -67,40 +68,40 @@ class ProjectMaker {
       return prompt;
     });
     console.log("\nSupply values for each token in this template.");
-    return inquirer.prompt(prompts)
-      .then(answers => this.addSpecialTokens(answers));
+    const tokens = inquirer.prompt(prompts);
+    this.addSpecialTokens(tokens);
+    return tokens;
   }
 
   addSpecialTokens(answers) {
     answers.TINPIG_USER_NAME = this.config.userName;
     answers.TINPIG_USER_EMAIL = this.config.userEmail;
-    this.tokens = answers;
   }
 
-  replaceTokensInFiles() {
-    const fileSet = `${this.projectPath}/**`;
-    Object.keys(this.tokens).forEach((token) => {
+  replaceTokensInFiles(projectPath, tokens) {
+    const fileSet = `${projectPath}/**`;
+    Object.keys(tokens).forEach((token) => {
       const re = new RegExp("\\${" + token + "}", "g"); // eslint-disable-line
       replace.sync({
         files: fileSet,
         from: re,
-        to: this.tokens[token],
+        to: tokens[token],
       });
     });
   }
 
-  renameFilesWithTokens(currentPath) {
+  renameFilesWithTokens(currentPath, tokens) {
     const files = fs.readdirSync(currentPath);
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const fullPath = `${currentPath}/${file}`;
       if (this.isDir(fullPath)) {
-        this.renameFilesWithTokens(fullPath);
+        this.renameFilesWithTokens(fullPath, tokens);
       }
-      Object.keys(this.tokens).forEach((token) => {
+      Object.keys(tokens).forEach((token) => {
         const re = new RegExp(`%${token}%`);
         if (file.match(re)) {
-          fs.moveSync(fullPath, `${currentPath}/${file.replace(re, this.tokens[token])}`);
+          fs.moveSync(fullPath, `${currentPath}/${file.replace(re, tokens[token])}`);
         }
       });
     }
@@ -110,7 +111,7 @@ class ProjectMaker {
     return fs.statSync(thePath).isDirectory();
   }
 
-  copyTemplate() {
+  async copyTemplate(projectPath) {
     const filter = (file) => {
       if (this.template.ignore) {
         for (let i = 0; i < this.template.ignore.length; i++) {
@@ -126,12 +127,12 @@ class ProjectMaker {
       errorOnExist: true,
       filter,
     };
-    return fs.copy(this.template.path, this.projectPath, options)
-      .then(() => this.projectPath);
+
+    await fs.copy(this.template.path, projectPath, options);
   }
 
-  displaySuccess() {
-    console.log(`\nSuccess! Your project has been created at '${this.projectPath}'.\n`);
+  displaySuccess(projectPath) {
+    console.log(`\nSuccess! Your project has been created at '${projectPath}'.\n`);
     if (this.template.postMessage) {
       console.log(this.template.postMessage);
     }

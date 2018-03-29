@@ -7,26 +7,25 @@ const configurator = new Configurator();
 const templateManager = new TemplateManager();
 
 class Tinpig {
-  start(templateName, filePath, customTemplatesDir) {
-    const projectMaker = new ProjectMaker();
-    configurator.configure(customTemplatesDir)
-      .then(config      => this.setConfig(config))
-      .then(()          => validatePathOrExit(filePath))
-      .then(()          => templateManager.getTemplate(templateName, this.config))
-      .then(template    => projectMaker.makeProject(filePath, template, this.config))
-      .catch(err        => console.log(err));
+  async start(templateName, filePath, customTemplatesDir) {
+    // try {
+      const projectMaker = new ProjectMaker();
+      const config = await configurator.configure(customTemplatesDir);
+      await validatePathOrExit(filePath);
+      const template = await templateManager.getTemplate(templateName, config);
+      await projectMaker.makeProject(filePath, template, config);
+    // } catch (err) {
+    //   console.log("\nTinpig encountered an error and is unable to create a project.");
+    // }
   }
 
-  setConfig(config) {
-    this.config = config;
-    return Promise.resolve();
-  }
-
-  displayList(customTemplatesDir) {
-    configurator.configure(customTemplatesDir)
-      .then(config => this.setConfig(config))
-      .then(() => templateManager.displayAvailableTemplates(this.config))
-      .catch(() => console.log("\nTinpig encountered an error and is unable to display templates."));
+  async displayList(customTemplatesDir) {
+    try {
+      const config = await configurator.configure(customTemplatesDir);
+      templateManager.displayAvailableTemplates(config);
+    } catch (err) {
+      console.log("\nTinpig encountered an error and is unable to display templates.");
+    }
   }
 }
 
