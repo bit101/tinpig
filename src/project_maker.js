@@ -1,4 +1,5 @@
 const fs = require("fs-extra");
+const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
 const { resolveHome, validatePath } = require("./file_utils");
@@ -9,7 +10,7 @@ class ProjectMaker {
     this.config = config;
 
     const projectPath = await this.getProjectPath(chosenPath);
-    const tokens = await this.getTokens();
+    const tokens = await this.getTokens(projectPath);
     try {
       await this.copyTemplate(projectPath);
       await this.replaceTokensInFiles(projectPath, tokens);
@@ -36,10 +37,10 @@ class ProjectMaker {
     return resolveHome(answer.projectPath);
   }
 
-  async getTokens() {
+  async getTokens(projectPath) {
     if (!this.template.tokens) {
       const tokens = {};
-      this.addSpecialTokens(tokens);
+      this.addSpecialTokens(tokens, projectPath);
       return tokens;
     }
 
@@ -68,14 +69,17 @@ class ProjectMaker {
       return prompt;
     });
     console.log("\nSupply values for each token in this template.");
-    const tokens = inquirer.prompt(prompts);
-    this.addSpecialTokens(tokens);
+    const tokens = await inquirer.prompt(prompts);
+    this.addSpecialTokens(tokens, projectPath);
     return tokens;
   }
 
-  addSpecialTokens(answers) {
+  addSpecialTokens(answers, projectPath) {
+    const fullPath = path.resolve("./", resolveHome(projectPath));
     answers.TINPIG_USER_NAME = this.config.userName;
     answers.TINPIG_USER_EMAIL = this.config.userEmail;
+    answers.TINPIG_PROJECT_PATH = fullPath;
+    answers.TINPIG_PROJECT_DIR = path.basename(fullPath);
   }
 
   replaceTokensInFiles(projectPath, tokens) {
