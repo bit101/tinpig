@@ -45,9 +45,10 @@ class ProjectMaker {
     }
 
     const validator = (token) => { // eslint-disable-line
+      const re = /[‘“!#$%&+^<=> `]/;
       return (value) => {
-        if (token.isPath && value.indexOf(" ") !== -1) {
-          return "This value should not contain spaces.";
+        if (token.isPath && re.test(value)) {
+          return "This value should not contain spaces or special characters: ‘“!#$%&+^<=>`.";
         }
         if (token.required && value === "") {
           return "This value is required.";

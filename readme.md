@@ -57,7 +57,7 @@ Type `tinpig -l` or `tinpig --list` to see a list of available templates with de
 
 Additional templates will be posted at https://github.com/bit101/tinpig-templates .
 
-Check out or download that repository and copy any templates you want into your local templates directory (`~/.config/tinpib/templates`). Again, feel free to customize them to make them fit your own use.
+Check out or download that repository and copy any templates you want into your local templates directory (`~/.config/tinpig/templates`). Again, feel free to customize them to make them fit your own use.
 
 ## Creating new templates
 
