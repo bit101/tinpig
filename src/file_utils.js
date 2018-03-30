@@ -8,8 +8,6 @@ function resolveHome(filepath) {
   return filepath;
 }
 
-
-
 async function checkPathAccess(filePath) {
   const parentDir = path.dirname(resolveHome(filePath));
   try {
