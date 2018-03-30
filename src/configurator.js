@@ -13,7 +13,8 @@ class Configurator {
     try {
       await fs.ensureDir(TINPIG_DIR);
 
-      if (fs.pathExistsSync(CONFIG_FILE)) {
+      const exists = await fs.pathExists(CONFIG_FILE);
+      if (exists) {
         return this.readConfig(customTemplatesDir);
       }
       return this.createConfig(customTemplatesDir);

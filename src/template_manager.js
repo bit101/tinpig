@@ -76,7 +76,8 @@ class TemplateManager  {
   async loadTemplate(templateName) {
     const path = `${this.templatesDir}/${templateName}`;
     const manifestPath = `${this.templatesDir}/${templateName}/tinpig.json`;
-    if (!fs.pathExistsSync(manifestPath)) {
+    const exists = await fs.pathExists(manifestPath);
+    if (!exists) {
       // If there is no manifest file, skip it.
       // Path could be a .DS_Store or something.
       return;

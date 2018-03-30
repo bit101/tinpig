@@ -8,41 +8,43 @@ function resolveHome(filepath) {
   return filepath;
 }
 
-function checkPathExists(filePath) {
-  return fs.pathExistsSync(resolveHome(filePath));
-}
 
-function checkPathAccess(filePath) {
+
+async function checkPathAccess(filePath) {
   const parentDir = path.dirname(resolveHome(filePath));
   try {
-    fs.accessSync(parentDir, fs.constants.W_OK);
+    await fs.access(parentDir, fs.constants.W_OK);
   } catch (err) {
     return false;
   }
   return true;
 }
 
-function validatePathOrExit(filePath) {
+async function validatePathOrExit(filePath) {
   if (filePath) {
-    if (checkPathExists(filePath)) {
+    const exists = await fs.pathExists(resolveHome(filePath));
+    if (exists) {
       console.log(`\nSorry, something already exists at '${filePath}'. Try a different path.`);
       process.exit();
     }
-    if (!checkPathAccess(filePath)) {
+    const hasAccess = await checkPathAccess(filePath);
+    if (!hasAccess) {
       console.log(`\nSorry, you don't have access to create a project at '${filePath}'. Try a different path.`);
       process.exit();
     }
   }
 }
 
-function validatePath(filePath) {
+async function validatePath(filePath) {
   if (!filePath) {
     return "Project path cannot be empty.";
   }
-  if (checkPathExists(filePath)) {
+  const exists = await fs.pathExists(resolveHome(filePath));
+  if (exists) {
     return `'${filePath}' already exists.`;
   }
-  if (!checkPathAccess(filePath)) {
+  const hasAccess = await checkPathAccess(filePath);
+  if (!hasAccess) {
     return `You don't have access to '${filePath}'.`;
   }
   return true;
