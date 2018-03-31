@@ -20,6 +20,8 @@ commander
   .option("-p, --path [path]", "specify path for project")
   .option("-d, --directory [directory]", "path to a folder of custom templates")
   .option("-l, --list", "list all available templates")
+  .option("-c, --configure", "configure tinpig options")
+  .option("-r, --reset", "reset tinpig options")
   .version(require('./package.json').version, "-v, --version")
   .parse(process.argv);
 
@@ -27,6 +29,10 @@ const tinpig = new Tinpig();
 
 if (commander.list) {
   tinpig.displayList(commander.directory);
+} else if (commander.configure) {
+  tinpig.configure();
+} else if (commander.reset) {
+  tinpig.reset();
 } else {
   tinpig.start(commander.template, commander.path, commander.directory);
 }

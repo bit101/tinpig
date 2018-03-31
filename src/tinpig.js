@@ -19,6 +19,14 @@ class Tinpig {
     }
   }
 
+  configure() {
+    configurator.reconfigure();
+  }
+
+  reset() {
+    configurator.reset();
+  }
+
   async displayList(customTemplatesDir) {
     try {
       const config = await configurator.configure(customTemplatesDir);

@@ -6,18 +6,11 @@ tinpig is a simple command line utility for quickly creating projects of any kin
 
 You'll need npm and an updated version of nodejs. Your version of nodejs should be 8.5.0 or higher, for the file copying functionality that was introduced at that point.
 
-
 ## Installation
 
 ``` shell
 npm install -g tinpig
 ```
-
-The first time you run tinpig it will create a folder at `~/.config/tinpig`. This will contain a file called `config` and a folder called `templates` that holds a few sample templates. Feel free to modify these for your own use, delete them, and add new templates here. If you delete all the folders in this directory, tinpig will repopulate it with the sample templates the next time it runs.
-
-## Configuration
-
-The `~/.config/tinpig/config` file will hold configuration values that will affect how the tool works. If you can edit that and set your name and email address, templates can then use those values in the projects they create.
 
 ## Use
 
@@ -53,6 +46,37 @@ If you specify the path and template, you'll still prompted to enter values for 
 
 Also see "External template directories" below for one more command line option.
 
+## Configuration
+
+After you install tinpig, run:
+
+``` shell
+tinpig configure
+```
+
+This will prompt you for a number of values:
+
+* user name
+* user email
+* custom templates dir
+* invalid path characters
+
+The user name and email values can be used by templates to automatically insert your name or email into a project. Feel free to leave these at their default values. You can always edit them later if a project uses them.
+
+By default, tinpig stores its templates in `~/.config/tinpig/templates/`. Setting a custom templates dir allows you to store the templates in another location of your choice. More on that later in this doc.
+
+tinpig templates can contain dynamic path and file names. If these are marked as paths, tinpig will make sure that the user enters a path name that will not cause problems. The set of invalid path characters listed here are pretty sensible, but you can customize them if you want.
+
+If you ever want to reset the four config values described above, type:
+
+``` shell
+tinpig reset
+```
+
+This will reset them all to their default values.
+
+All of this data is stored in `~/.config/tinpig/config`. You can edit this file manually as well.
+
 ## Help
 
 Type `tinpig -h` or `tinpig --help` to see a list of options.
@@ -63,7 +87,7 @@ Type `tinpig -l` or `tinpig --list` to see a list of available templates with de
 
 Additional templates will be posted at https://github.com/bit101/tinpig-templates .
 
-Check out or download that repository and copy any templates you want into your local templates directory (`~/.config/tinpig/templates`). Again, feel free to customize them to make them fit your own use.
+Check out or download that repository and copy any templates you want into your local templates directory (`~/.config/tinpig/templates`) or custom templates dir if you set one. Again, feel free to customize them to make them fit your own use.
 
 ## Creating new templates
 
@@ -73,13 +97,13 @@ At its simplest, a template is simply a folder containing some files. But there 
 
 If you create a nice template and want to share, submit it as a pull request at https://github.com/bit101/tinpig-templates .
 
-## External template directories
+## Custom template directories
 
 You can choose to store your templates in a directory other than `~/.config/tinpig/templates`. There are two ways to do this.
 
 ### Changing the path permanently
 
-Edit `~/.config/tinpig/config` and change the `templatesDir` value to the path you want to store your templates. The next time tinpig starts, it will look there rather than the default location.
+Run `tinpig configure` or edit the file `~/.config/tinpig/config` and change the `templatesDir` value to the path you want to store your templates. The next time tinpig starts, it will look there rather than the default location.
 
 Note, if you specify an empty directory, tinpig will copy the default sample templates there the first time it runs.
 
@@ -93,7 +117,7 @@ Use the `-d` or `--directory` parameter on the command line to point to the dire
 tinpig -d ~/my_templates
 ```
 
-You will be asked to choose a template from the ones available in that directory.
+You will be asked to choose a template from the ones available in that directory. Note that this directory is only used for this particular run of tinpig. It does not change the values stored in tinpig's configuration.
 
 Note that this method also works if you want to specify a template on the command line. Say `~/my_templates` contains a template named `GoProject`. You could say:
 

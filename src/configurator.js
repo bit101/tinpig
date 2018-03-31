@@ -1,6 +1,8 @@
 const fs = require("fs-extra");
+const inquirer = require("inquirer");
 
 const { CONFIG_FILE, TINPIG_DIR } = require("./constants");
+const { resolveHome } = require("./file_utils");
 
 const DEFAULT_CONFIG = {
   templatesDir: `${TINPIG_DIR}/templates`,
@@ -72,6 +74,62 @@ class Configurator {
       return this.readConfig(customTemplatesDir);
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async reconfigure() {
+    const config = await this.configure();
+
+    const prompt = [{
+      type: "input",
+      name: "userName",
+      message: "User name",
+      default: config.userName,
+      prefix: "",
+      suffix: ":",
+    },
+    {
+      type: "input",
+      name: "userEmail",
+      message: "User email",
+      default: config.userEmail,
+      prefix: "",
+      suffix: ":",
+    },
+    {
+      type: "input",
+      name: "templatesDir",
+      message: "Custom templates directory",
+      default: config.templatesDir,
+      prefix: "",
+      suffix: ":",
+    },
+    {
+      type: "input",
+      name: "invalidPathChars",
+      message: "Invalid path characters",
+      default: config.invalidPathChars,
+      prefix: "",
+      suffix: ":",
+    }];
+    const answers = await inquirer.prompt(prompt);
+    config.userName = answers.userName;
+    config.userEmail = answers.userEmail;
+    config.templatesDir = resolveHome(answers.templatesDir);
+    config.invalidPathChars = answers.invalidPathChars;
+    fs.writeJSON(CONFIG_FILE, config, { spaces: 2 });
+  }
+
+  async reset() {
+    const answers = await inquirer.prompt([{
+      type: "confirm",
+      name: "okToReset",
+      message: "This will reset your tinpig config to default. Are you sure?",
+      prefix: "",
+      suffix: ":",
+    }]);
+    if (answers.okToReset) {
+      fs.writeJSON(CONFIG_FILE, DEFAULT_CONFIG, { spaces: 2 });
     }
   }
 }
