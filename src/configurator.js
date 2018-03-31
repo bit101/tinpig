@@ -6,6 +6,7 @@ const DEFAULT_CONFIG = {
   templatesDir: `${TINPIG_DIR}/templates`,
   userName: "User Name",
   userEmail: "username@sampledomain.com",
+  invalidPathChars: "‘“!#$%&+^<=>` ",
 };
 
 class Configurator {
@@ -45,6 +46,10 @@ class Configurator {
       }
       if (typeof config.userEmail !== "string") {
         config.userEmail = DEFAULT_CONFIG.userEmail;
+        updated = true;
+      }
+      if (typeof config.invalidPathChars !== "string") {
+        config.invalidPathChars = DEFAULT_CONFIG.invalidPathChars;
         updated = true;
       }
 

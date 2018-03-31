@@ -49,10 +49,10 @@ class ProjectMaker {
     }
 
     const validator = (token) => { // eslint-disable-line
-      const re = /[‘“!#$%&+^<=> `]/;
+      const re = new RegExp(`[${this.config.invalidPathChars}]`);
       return (value) => {
         if (token.isPath && re.test(value)) {
-          return "This value should not contain spaces or special characters: ‘“!#$%&+^<=>`.";
+          return `This value should not contain spaces or special characters: ${this.config.invalidPathChars}`;
         }
         if (token.required && value === "") {
           return "This value is required.";
