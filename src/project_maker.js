@@ -8,6 +8,10 @@ class ProjectMaker {
   async makeProject(chosenPath, template, config) {
     this.template = template;
     this.config = config;
+    if (template.preMessage) {
+      console.log("");
+      console.log(template.preMessage);
+    }
 
     const projectPath = await this.getProjectPath(chosenPath);
     const tokens = await this.getTokens(projectPath);
