@@ -1,0 +1,7 @@
+{
+  "name": "JavaBasic",
+  "description": "A barebones Java project with a class.",
+  "author": "Keith Peters",
+  "contact": "https://github.com/bit101",
+  "postMessage": "Run the makefile with 'make' or run 'javac Helloworld.java' and then 'java HelloWorld'."
+}

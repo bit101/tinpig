@@ -1,0 +1,19 @@
+{
+  "name": "NodeJS",
+  "description": "Barebones node project with npm.",
+  "author": "Keith Peters",
+  "contact": "https://github.com/bit101",
+  "tokens": [
+    {
+      "name": "AUTHOR"
+    },
+    {
+      "name": "PROJECT_NAME"
+    },
+    {
+      "name": "LICENSE",
+      "default": "ISC"
+    }
+  ],
+  "postMessage": "Enter the project name and type `node index.js`"
+}
