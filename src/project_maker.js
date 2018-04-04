@@ -2,7 +2,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
-const { resolveHome, validatePath } = require("./file_utils");
+const { isDir, resolveHome, validatePath, warnExistingDir } = require("./file_utils");
 
 class ProjectMaker {
   async makeProject(chosenPath, template, config) {
@@ -38,7 +38,9 @@ class ProjectMaker {
       validate: validatePath,
     }];
     const answer = await inquirer.prompt(prompt);
-    return resolveHome(answer.projectPath);
+    const projectPath = resolveHome(answer.projectPath);
+    await warnExistingDir(projectPath);
+    return projectPath;
   }
 
   async getTokens(projectPath) {
@@ -104,7 +106,7 @@ class ProjectMaker {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const fullPath = `${currentPath}/${file}`;
-      if (this.isDir(fullPath)) {
+      if (isDir(fullPath)) {
         this.renameFilesWithTokens(fullPath, tokens);
       }
       Object.keys(tokens).forEach((token) => {
@@ -114,10 +116,6 @@ class ProjectMaker {
         }
       });
     }
-  }
-
-  isDir(thePath) {
-    return fs.statSync(thePath).isDirectory();
   }
 
   async copyTemplate(projectPath) {
@@ -133,7 +131,7 @@ class ProjectMaker {
     };
     const options = {
       overwrite: false,
-      errorOnExist: true,
+      errorOnExist: false,
       filter,
     };
 

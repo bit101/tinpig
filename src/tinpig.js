@@ -1,7 +1,7 @@
 const Configurator = require("./configurator");
 const TemplateManager = require("./template_manager");
 const ProjectMaker = require("./project_maker");
-const { validatePathOrExit } = require("./file_utils");
+const { validatePathOrExit, warnExistingDir } = require("./file_utils");
 
 const configurator = new Configurator();
 const templateManager = new TemplateManager();
@@ -12,6 +12,7 @@ class Tinpig {
       const projectMaker = new ProjectMaker();
       const config = await configurator.configure(customTemplatesDir);
       await validatePathOrExit(filePath);
+      await warnExistingDir(filePath);
       const template = await templateManager.getTemplate(templateName, config);
       await projectMaker.makeProject(filePath, template, config);
     } catch (err) {

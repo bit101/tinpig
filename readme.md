@@ -77,6 +77,12 @@ This will reset them all to their default values.
 
 All of this data is stored in `~/.config/tinpig/config`. You can edit this file manually as well.
 
+## Existing content
+
+If the project path you specify already holds a single existing file, you cannot create a project there, obviously.
+
+If the project path is an existing directory, you will be warned of this fact. tinpig will never overwrite or alter existing content in a directory. If the template is attempting to create a file that has the same name as an existing file in that directory, that file will silently fail. Any other non-conflicting files should copy over just fine though. You should be aware of what files the template is creating and know if they will conflict with existing content.
+
 ## Help
 
 Type `tinpig -h` or `tinpig --help` to see a list of options.
