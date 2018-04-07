@@ -9,6 +9,7 @@ async function getTemplateChoice(templates) {
     name: "choice",
     message: "\nChoose a template",
     choices: templateNames,
+    pageSize: 20,
     prefix: "",
     suffix: ":",
   }];
