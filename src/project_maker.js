@@ -2,7 +2,9 @@ const fs = require("fs-extra");
 const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
-const { isDir, resolveHome, validatePath, warnExistingDir } = require("./file_utils");
+const {
+  isDir, resolveHome, validatePath, warnExistingDir,
+} = require("./file_utils");
 
 class ProjectMaker {
   async makeProject(chosenPath, template, config) {
