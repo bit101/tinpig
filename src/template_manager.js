@@ -56,6 +56,7 @@ class TemplateManager  {
     await this.createTemplates(templatePaths);
     const templates = await this.readTemplates();
     await this.loadTemplates(templates);
+    this.sortTemplates();
     this.verifyTemplates();
   }
 
@@ -86,6 +87,10 @@ class TemplateManager  {
     const template = await fs.readJSON(manifestPath);
     template.path = path;
     this.templates.push(template);
+  }
+
+  sortTemplates() {
+    this.templates.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
   verifyTemplates() {
