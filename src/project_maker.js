@@ -2,6 +2,8 @@ const fs = require("fs-extra");
 const path = require("path");
 const replace = require("replace-in-file");
 const inquirer = require("inquirer");
+const { execSync } = require('child_process');
+
 const {
   isDir, resolveHome, validatePath, warnExistingDir,
 } = require("./file_utils");
@@ -144,6 +146,10 @@ class ProjectMaker {
     console.log(`\nSuccess! Your project has been created at '${projectPath}'.\n`);
     if (this.template.postMessage) {
       console.log(this.template.postMessage);
+    }
+
+    if (this.template.postCommand) {
+      let stdout = execSync(`cd ${projectPath} && ${this.template.postCommand}`);
     }
   }
 }

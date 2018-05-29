@@ -6,5 +6,6 @@
       "name": "TITLE",
       "default": "Hello canvas"
     }
-  ]
+  ],
+  "postCommand": "subl ."
 }
