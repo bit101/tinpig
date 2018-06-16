@@ -1,6 +1,7 @@
 // use-strict
+const os = require("os");
 
-const TINPIG_DIR = `${process.env.HOME}/.config/tinpig`;
+const TINPIG_DIR = `${os.homedir()}/.config/tinpig`;
 const constants = {
   TINPIG_DIR,
   CONFIG_FILE: `${TINPIG_DIR}/config`,
