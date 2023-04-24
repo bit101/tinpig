@@ -30,7 +30,7 @@
     "replace-in-file": "^3.4.0"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^8.39.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0"
   }
