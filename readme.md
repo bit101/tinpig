@@ -51,7 +51,7 @@ Also see "External template directories" below for one more command line option.
 After you install tinpig, run:
 
 ``` shell
-tinpig configure
+tinpig --configure
 ```
 
 This will prompt you for a number of values:
