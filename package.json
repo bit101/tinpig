@@ -1,6 +1,6 @@
 {
   "name": "tinpig",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Create projects based on your own custom templates. Supports token replacement of content and file names at project creation time.",
   "repository": "https://github.com/bit101/tinpig",
   "preferGlobal": true,
@@ -30,8 +30,8 @@
     "replace-in-file": "^3.4.0"
   },
   "devDependencies": {
-    "eslint": "^8.39.0",
-    "eslint-config-airbnb": "^16.1.0",
+    "eslint": "^8.48.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.9.0"
   }
 }
